@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青甘大环线 11 日 · 行程地图（9.26–10.6）</title>
+<style>
+  :root{--ink:#1f2933;--ink2:#52606d;--line:#e4e7eb;--panel:#ffffff}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif;color:var(--ink)}
+  .app{display:flex;height:100vh;width:100vw}
+  #side{width:386px;min-width:386px;height:100%;overflow-y:auto;background:#f7f5ef;border-right:1px solid var(--line);padding:14px 12px}
+  #side::-webkit-scrollbar{width:8px}
+  #side::-webkit-scrollbar-thumb{background:#d5d0c4;border-radius:4px}
+  .hd{font-size:19px;font-weight:800;letter-spacing:.5px;padding:2px 6px 0}
+  .hd small{display:block;font-size:12px;color:var(--ink2);font-weight:500;margin-top:4px;line-height:1.5}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:9px 0;padding:10px 12px 9px;border-left:5px solid var(--dc,#c74e2a);cursor:pointer;transition:box-shadow .15s,transform .15s;scroll-margin:8px}
+  .card:hover{box-shadow:0 3px 10px rgba(0,0,0,.08)}
+  .card.active{box-shadow:0 0 0 2px var(--dc,#c74e2a);transform:translateX(2px)}
+  .c-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 7px}
+  .cn{font-weight:800;color:var(--dc,#c74e2a);font-size:15px}
+  .cd{font-size:11.5px;color:var(--ink2);background:#f2efe7;border-radius:4px;padding:1px 6px}
+  .cr{font-size:13.5px;font-weight:700}
+  .cm{margin-left:auto;font-size:11px;color:var(--ink2);white-space:nowrap}
+  .c-tags{font-size:11.8px;color:#6b4d1f;line-height:1.6;margin:5px 2px 0;background:#fff9ea;border-radius:6px;padding:4px 7px}
+  .c-hot{margin-top:6px;display:grid;gap:3px}
+  .ht{font-size:11.8px;line-height:1.5;padding:2px 6px;border-radius:6px;background:#f6f4ee}
+  .ht i{display:inline-block;font-style:normal;font-weight:800;color:var(--dc,#c74e2a);margin-right:6px;font-size:11px}
+  .c-rm{font-size:10.5px;color:var(--ink2);margin-top:5px;letter-spacing:.3px}
+  .c-rm b{color:#a03a22}
+  #mapWrap{flex:1;position:relative;min-width:0}
+  #map{position:absolute;inset:0}
+  #chips{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:6px;overflow-x:auto;padding:8px;background:rgba(255,255,255,.92);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap;scrollbar-width:thin;z-index:5}
+  .chip{display:inline-flex;align-items:center;gap:5px;border:1px solid #ddd8cc;background:#fff;color:var(--ink);border-radius:20px;padding:3px 9px;font-size:11.5px;cursor:pointer;flex:none}
+  .chip:hover{border-color:var(--dc,#c74e2a)}
+  .chip.active{background:#efe9db}
+  .chip .dot{width:9px;height:9px;border-radius:50%;background:var(--dc,#666)}
+  .chip .dot.stay{width:11px;height:11px}
+  #btnFit{display:inline-flex;align-items:center;border:1px solid #ddd8cc;background:#fff;border-radius:20px;padding:3px 10px;font-size:11.5px;cursor:pointer;flex:none;color:#444;margin-right:2px}
+  #btnFit:hover{background:#f5f0e3}
+  #legend{position:absolute;left:10px;bottom:12px;background:rgba(255,255,255,.94);border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.12);padding:8px 11px;font-size:11px;line-height:1.8;color:#37404a;z-index:4;max-width:250px}
+  #legend .lg{display:flex;align-items:center;gap:7px}
+  .lg-i{width:15px;height:15px;border-radius:50%;display:inline-block;flex:none}
+  .lg-st{width:13px;height:13px;border-radius:50%;display:inline-block;flex:none}
+  .lg-ar{display:inline-block;width:0;height:0;border-left:7px solid #333;border-top:5px solid transparent;border-bottom:5px solid transparent;flex:none}
+  #err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:#faf8f2;z-index:50;text-align:center;padding:30px}
+  #err b{font-size:17px;color:#a03a22}
+  .ppw{font-size:12.5px;line-height:1.7;min-width:180px;max-width:240px}
+  .ppw .t{font-weight:800;font-size:14px;margin-bottom:2px}
+  .ppw .tg{display:inline-block;background:#fff1de;color:#8a4b00;font-size:11px;border-radius:4px;padding:0 6px;margin:2px 2px 0 0}
+  .ppw .nt{color:#4b5563;font-size:12px;margin-top:3px;border-top:1px dashed #e2dccb;padding-top:3px}
+  .ppw .st{display:inline-block;background:#eaf6ef;color:#2f7d4f;font-weight:700;border-radius:4px;padding:0 6px;font-size:11px}
+  @media (max-width:900px){
+    .app{flex-direction:column}
+    #side{width:100%;min-width:0;height:42%;min-height:260px;border-right:none;border-bottom:1px solid var(--line)}
+    #mapWrap{height:58%}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside id="side">
+    <div class="hd">青甘大环线 · 11 日 🗺️
+      <small>9/26（六）西宁集合 → 10/6（二）返西宁 · 约3350KM · 点击卡片定位 · 每站两档酒店</small>
+    </div>
+
+    <div class="card" data-d="1" data-xy="36.617,101.778" style="--dc:#c74e2a">
+      <div class="c-top"><span class="cn">D1</span><span class="cd">9/26 周六</span><span class="cr">西宁 · 抵达集合</span><span class="cm">休整日</span></div>
+      <div class="c-tags">提车检查 · 超市补给 · 采购零食饮水 ·（可选）夜游莫家街/水井巷 1–2h</div>
+      <div class="c-hot">
+        <div class="ht"><i>9/26 住</i>汉庭酒店 · 西宁火车站中发源城市广场店</div>
+        <div class="ht"><i>提示</i>10/6 收官回西宁如需过夜可续订同一家</div>
+      </div>
+      <div class="c-rm">宿 <b>西宁 2260m</b> · 首晚别熬夜；红景天已连吃 7 天 · 明早 8:30 出发</div>
+    </div>
+
+    <div class="card" data-d="2" data-xy="38.177,100.249" style="--dc:#2f9e6f">
+      <div class="c-top"><span class="cn">D2</span><span class="cd">9/27 周日</span><span class="cr">西宁 → 祁连县</span><span class="cm">281KM · ~5h</span></div>
+      <div class="c-tags">达坂山观景台 30min · 祁连草原随停 · 阿柔大寺 45min ·（早到）卓尔山日落 2h</div>
+      <div class="c-hot">
+        <div class="ht"><i>9/27 住</i>宜必思·尚品酒店</div>
+        <div class="ht"><i>备选</i>祁连天境卓尔国际饭店</div>
+      </div>
+      <div class="c-rm">宿 <b>祁连县 2760m</b> · 首个驾驶日慢节奏，适应海拔</div>
+    </div>
+
+    <div class="card" data-d="3" data-xy="38.935,100.455" style="--dc:#1f6fb2">
+      <div class="c-top"><span class="cn">D3</span><span class="cd">9/28 周一</span><span class="cr">祁连 → 张掖</span><span class="cm">244KM · ~4.5h</span></div>
+      <div class="c-tags">卓尔山 2–3h（7:30 前看晨光云海）· 扁都口随停 · 七彩丹霞 2.5–3h（16:30 进，日落 19:20）</div>
+      <div class="c-hot">
+        <div class="ht"><i>9/28 住</i>宜尚酒店</div>
+        <div class="ht"><i>备选</i>全季酒店</div>
+      </div>
+      <div class="c-rm">宿 <b>张掖 1480m</b> · 今晚是全程唯一舒适洗浴日，明天起连赶两天</div>
+    </div>
+
+    <div class="card" data-d="4" data-xy="40.14,94.66" style="--dc:#a05ab5">
+      <div class="c-top"><span class="cn">D4</span><span class="cd">9/29 周二</span><span class="cr">张掖 → 敦煌（纯赶路）</span><span class="cm">~600KM · ~6.5h</span></div>
+      <div class="c-tags">8:00 前出城 · 全程 G30 高速 · 两人轮换开 · 备选：金塔胡杨林 2h（10 月正金黄）· 晚沙州夜市 1.5h</div>
+      <div class="c-hot">
+        <div class="ht"><i>9/29 住</i>Fonso·方所酒店 / 敦煌夜市绿洲岛隐酒店</div>
+        <div class="ht"><i>备选</i>SPEEL 设计师酒店 · 三家连住到 9/30 免搬行李</div>
+      </div>
+      <div class="c-rm">宿 <b>敦煌 1140m · 连住两晚（9/29+9/30）</b> · ⚡ 今晚起黄金周房价高位，务必提前锁两晚订单</div>
+    </div>
+
+    <div class="card" data-d="5" data-xy="40.14,94.66" style="--dc:#cf4260">
+      <div class="c-top"><span class="cn">D5</span><span class="cd">9/30 周三 ★ 敦煌整天</span><span class="cr">莫高窟 + 鸣沙山月牙泉</span><span class="cm">市区 ~50KM</span></div>
+      <div class="c-tags">莫高窟 3h（A 类票约 8:30 最早场，提前 30 天抢！）· 中午回酒店午休 · 15:30 进鸣沙山：骆驼+爬沙山 · 日落 19:15 · 万人星空演唱会</div>
+      <div class="c-hot">
+        <div class="ht"><i>方案A</i>续住 9/29 同店（Fonso·方所 / 绿洲岛隐 / SPEEL）</div>
+        <div class="ht"><i>方案B</i>当晚赴阿克塞（+110KM）：艾菲酒店 / 西霖酒店 → 10/1 去冷湖更轻松</div>
+      </div>
+      <div class="c-rm">宿 <b>敦煌（第二晚）</b> · 鞋套/口罩/防沙套门口买，穿凉鞋+袜子最舒服</div>
+    </div>
+
+    <div class="card" data-d="6" data-xy="38.75,93.36" style="--dc:#e0a61c">
+      <div class="c-top"><span class="cn">D6</span><span class="cd">10/1 周四（国庆）</span><span class="cr">敦煌 → 冷湖</span><span class="cm">~280KM · ~4h</span></div>
+      <div class="c-tags">黑独山·胭脂山 1.5h（“人间月球”，日落前 1h 最佳）· 晚冷湖观星 1h+（国际暗夜保护区）</div>
+      <div class="c-hot">
+        <div class="ht"><i>10/1 住</i>星穹秘境品质酒店 / 茫崖星际品质酒店</div>
+        <div class="ht"><i>备选</i>美豪酒店（冷湖店）· 有氧气</div>
+      </div>
+      <div class="c-rm">宿 <b>冷湖 2800m</b> · ⚡ 镇小房源少，国庆夜必须提前锁房 · 夜间可至 0℃ 以下</div>
+    </div>
+
+    <div class="card" data-d="7" data-xy="36.41,94.90" style="--dc:#3aa24d">
+      <div class="c-top"><span class="cn">D7</span><span class="cd">10/2 周五</span><span class="cr">冷湖 → 格尔木（最长驾驶日）</span><span class="cm">~470KM · ~7–7.5h</span></div>
+      <div class="c-tags">火星一号公路 2h · 俄博梁牌坊打卡 · 南八仙 45min · 察尔汗盐湖 2h（16:30 前必须入园）· 8:00 前出发</div>
+      <div class="c-hot">
+        <div class="ht"><i>10/2 住</i>宜必思富氧酒店（格尔木）· 有氧气</div>
+        <div class="ht"><i>备选</i>桔子酒店</div>
+      </div>
+      <div class="c-rm">宿 <b>格尔木 2780m</b> · 任务：满油+20L 油桶 · 买氧气瓶 4–6 罐 · 超市大采购 · 检查胎压备胎</div>
+    </div>
+
+    <div class="card" data-d="8" data-xy="34.49,95.79" style="--dc:#4f6fc9">
+      <div class="c-top"><span class="cn">D8</span><span class="cd">10/3 周六 ⚠️ 海拔急升</span><span class="cr">格尔木 → 可可西里 → 曲麻莱</span><span class="cm">~380KM · ~6.5h</span></div>
+      <div class="c-tags">昆仑圣泉 30min · 玉珠峰观景台 30min · 昆仑山口(4768m) 30min · 不冻泉·索南达杰站 30–60min</div>
+      <div class="c-hot">
+        <div class="ht"><i>10/3 住</i>曲麻莱松赞酒店 · 有氧气</div>
+        <div class="ht"><i>注意</i>海拔 4176m：夜不洗澡 · 血氧&lt;80% 下撤</div>
+      </div>
+      <div class="c-rm">宿 <b>曲麻莱 4176m</b> · 2780→4768→4176：不剧烈运动、不洗澡、多喝水、血氧&lt;80% 下撤</div>
+    </div>
+
+    <div class="card" data-d="9" data-xy="34.92,98.21" style="--dc:#8a6f2f">
+      <div class="c-top"><span class="cn">D9</span><span class="cd">10/4 周日</span><span class="cr">曲麻莱 → 两湖一碑 → 玛多</span><span class="cm">~300KM · ~5h</span></div>
+      <div class="c-tags">星宿海远观 · 两湖一碑 2–3h（鄂陵湖+牛头碑；私家车禁入，玛多包车约 ¥2000，出发前电话确认开放）</div>
+      <div class="c-hot">
+        <div class="ht"><i>10/4 住</i>玛多扎陵湖酒店 · 有氧气</div>
+        <div class="ht"><i>注意</i>4270m 全程最高：不洗澡早睡 · 两湖一碑包车提前确认</div>
+      </div>
+      <div class="c-rm">宿 <b>玛多 4270m（全程海拔最高+条件最差）</b> · 继续不洗澡，早睡</div>
+    </div>
+
+    <div class="card" data-d="10" data-xy="36.28,100.62" style="--dc:#19a3a0">
+      <div class="c-top"><span class="cn">D10</span><span class="cd">10/5 周一</span><span class="cr">玛多 → 阿尼玛卿 → 共和</span><span class="cm">~330KM · ~5h</span></div>
+      <div class="c-tags">阿尼玛卿观景点 1–1.5h（主峰玛卿岗日 6282m）· 沿途草原牧场随停 · ✔ 海拔降至 2850m，今晚可洗澡</div>
+      <div class="c-hot">
+        <div class="ht"><i>10/5 住</i>汉庭酒店（共和）</div>
+        <div class="ht"><i>备选</i>如家酒店 · neo</div>
+      </div>
+      <div class="c-rm">宿 <b>共和/恰卜恰 2850m（回血日）</b> · 明天收官环青海湖回西宁</div>
+    </div>
+
+    <div class="card" data-d="11" data-xy="36.617,101.778" style="--dc:#c0653f">
+      <div class="c-top"><span class="cn">D11</span><span class="cd">10/6 周二 · 收官</span><span class="cr">共和 → 青海湖 → 西宁</span><span class="cm">~360KM · ~5.5h</span></div>
+      <div class="c-tags">8:00 出发 · 二郎剑 2h（或环湖东路免费机位）· 倒淌河/日月山 1h 可选 · 16:00 前回西宁 · 莫家街手抓羊肉收官</div>
+      <div class="c-hot">
+        <div class="ht"><i>10/6 回</i>西宁 · 当晚如需过夜可续订 9/26 的汉庭（火车站·中发源广场店）</div>
+        <div class="ht"><i>收官</i>16:00 前回城避开高峰 · 莫家街手抓羊肉 🐑</div>
+      </div>
+      <div class="c-rm">行程结束 🎉 · 9/26–10/6 共 10 晚：西宁+祁连+张掖+敦煌×2+冷湖+格尔木+曲麻莱+玛多+共和</div>
+    </div>
+  </aside>
+
+  <div id="mapWrap">
+    <div id="map"></div>
+    <div id="chips"><div id="btnFit">◉ 全景</div></div>
+    <div id="legend">
+      <div class="lg"><span class="lg-st" style="background:#c74e2a;border:2.5px solid #c74e2a"></span> 数字徽章 = 当日住宿（D1 9/26 → D11 10/6）</div>
+      <div class="lg"><span class="lg-i" style="background:#2f9e6f"></span> 色点 = 景区/途经点（点击看详情）</div>
+      <div class="lg"><span class="lg-ar"></span> 箭头 = 行车方向（逐日一色）</div>
+    </div>
+    <div id="err"><div><b>地图加载失败</b><br><span style="font-size:13px;color:#555">腾讯地图 GL JS 加载超时。请检查网络后刷新页面；左侧 11 天行程与酒店信息不受影响。</span></div></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window._TMapSecurityConfig = {
+    serviceHost: 'http://127.0.0.1:__WB_HTTP_PORT__/_TMapService/_wbt/__WB_TMAP_SECRET__',
+  };
+</script>
+<script src="https://map.qq.com/api/gljs?v=1.exp"></script>
+
+<script>
+const COLORS = ['#c74e2a','#2f9e6f','#1f6fb2','#a05ab5','#cf4260','#e0a61c','#3aa24d','#4f6fc9','#8a6f2f','#19a3a0','#c0653f'];
+
+/* 住宿点：d = 第几天（徽章数字） */
+const STAYS = [
+  {d:1,  id:'s1',  name:'西宁 · 9/26到/10/6回', xy:[36.617,101.778]},
+  {d:2,  id:'s2',  name:'祁连县 9/27',        xy:[38.177,100.249]},
+  {d:3,  id:'s3',  name:'张掖 9/28',          xy:[38.935,100.455]},
+  {d:4,  id:'s4',  name:'敦煌 9/29–30 两晚',   xy:[40.14,94.66]},
+  {d:6,  id:'s6',  name:'冷湖镇 10/1',        xy:[38.75,93.36]},
+  {d:7,  id:'s7',  name:'格尔木 10/2',        xy:[36.41,94.90]},
+  {d:8,  id:'s8',  name:'曲麻莱 10/3',        xy:[34.49,95.79]},
+  {d:9,  id:'s9',  name:'玛多县 10/4',        xy:[34.92,98.21]},
+  {d:10, id:'s10', name:'共和 10/5',          xy:[36.28,100.62]},
+];
+
+/* 景区 / 途经点：d = 所属天数 */
+const SCENICS = [
+  {d:2,  id:'p2', name:'达坂山观景台',    xy:[37.11,101.38], time:'30min',  note:'俯瞰黑泉水库与雪山，门源方向'},
+  {d:3,  id:'p3', name:'卓尔山',          xy:[38.22,100.30], time:'2–3h',   note:'7:30 前上山看晨光/云海，“东方瑞士”'},
+  {d:3,  id:'p3b',name:'张掖七彩丹霞',    xy:[39.00,100.12], time:'2.5–3h', note:'16:30 进园，4 号观景台看日落 19:20'},
+  {d:4,  id:'p4', name:'金塔胡杨林 · 可选',xy:[39.98,98.90], time:'~2h',    note:'绕行+60KM；10 月上旬正金黄，金波湖倒影'},
+  {d:5,  id:'p5', name:'莫高窟',          xy:[40.036,94.809],time:'3h',     note:'A 类票 8 个窟+数字电影，9/30 场次已开售快去抢'},
+  {d:5,  id:'p5b',name:'鸣沙山·月牙泉',   xy:[40.08,94.67],  time:'3.5h',   note:'15:30 进：骆驼+爬沙山，日落 19:15，星空演唱会'},
+  {d:6,  id:'p6', name:'黑独山·胭脂山',   xy:[38.85,93.58],  time:'1.5h',   note:'“人间月球”，日落前 1h 最佳'},
+  {d:7,  id:'p7', name:'火星一号公路·俄博梁',xy:[38.42,93.35],time:'2h',   note:'无人区穿越；四驱+穿越费可进营地，两驱牌坊打卡'},
+  {d:7,  id:'p7b',name:'南八仙雅丹',      xy:[38.10,93.90],  time:'45min',  note:'魔鬼城地貌，风沙大'},
+  {d:7,  id:'p7c',name:'察尔汗盐湖',      xy:[36.90,95.00],  time:'2h',     note:'万丈盐桥+景区大巴，16:30 前必须入园'},
+  {d:8,  id:'p8', name:'昆仑圣泉（纳赤台）',xy:[35.86,94.35],time:'30min',  note:'昆仑神泉，可接水'},
+  {d:8,  id:'p8b',name:'玉珠峰观景台',    xy:[35.72,94.22],  time:'30min',  note:'6178m 雪山正面，西大滩'},
+  {d:8,  id:'p8c',name:'昆仑山口 4768m',  xy:[35.66,94.07],  time:'30min',  note:'可可西里门户，风大少停留'},
+  {d:8,  id:'p8d',name:'不冻泉·索南达杰站',xy:[35.50,94.00], time:'30–60min',note:'可能看到藏野驴/藏原羚'},
+  {d:9,  id:'p9', name:'两湖一碑（牛头碑）',xy:[34.92,97.55],time:'2–3h',   note:'鄂陵湖/扎陵湖；需玛多包当地越野车约 ¥2000'},
+  {d:10, id:'p10',name:'阿尼玛卿观景点',  xy:[35.08,99.48],  time:'1–1.5h', note:'远观主峰玛卿岗日 6282m'},
+  {d:11, id:'p11',name:'青海湖·二郎剑',   xy:[36.55,100.65], time:'2h',     note:'或走环湖东路免费机位，10 月草场泛金'},
+  {d:11, id:'p11b',name:'日月山 · 可选',  xy:[36.42,101.10], time:'1h',     note:'文成公主进藏处，顺路'}, 
+  {d:11, id:'p11c',name:'塔尔寺 · 可选',  xy:[36.48,101.57], time:'2–2.5h', note:'酥油花/壁画/堆绣三绝'},
+];
+
+/* 每日行车主线（d=2..11；D1 为西宁集合日无行车） */
+const LINES = [
+  {d:2, pts:[[36.617,101.778],[36.93,101.67],[37.11,101.38],[37.55,100.9],[38.177,100.249]]},
+  {d:3, pts:[[38.177,100.249],[38.22,100.30],[38.0,100.8],[38.14,100.9],[38.43,100.82],[38.935,100.455]]},
+  {d:4, pts:[[38.935,100.455],[39.3,99.4],[39.77,98.29],[40.0,96.5],[40.35,95.2],[40.14,94.66]]},
+  {d:5, pts:[[40.14,94.66],[40.05,94.74],[40.036,94.809]]},
+  {d:6, pts:[[40.14,94.66],[39.63,94.34],[38.85,93.58],[38.75,93.36]]},
+  {d:7, pts:[[38.75,93.36],[38.42,93.35],[38.10,93.90],[36.90,95.00],[36.41,94.90]]},
+  {d:8, pts:[[36.41,94.90],[35.86,94.35],[35.72,94.22],[35.66,94.07],[35.50,94.00],[34.9,95.2],[34.49,95.79]]},
+  {d:9, pts:[[34.49,95.79],[34.75,96.5],[34.9,97.2],[34.92,97.55],[34.92,98.21]]},
+  {d:10,pts:[[34.92,98.21],[35.15,98.9],[35.08,99.48],[35.4,99.9],[35.9,100.3],[36.28,100.62]]},
+  {d:11,pts:[[36.28,100.62],[36.5,100.68],[36.55,100.65],[36.45,100.9],[36.42,101.10],[36.617,101.778]]},
+];
+const SPURS = [
+  {d:3, pts:[[38.935,100.455],[39.00,100.12]]},
+  {d:5, pts:[[40.036,94.809],[40.05,94.72],[40.08,94.67]]},
+];
+
+let map, markers, infoWin = null, allGeoms = [], sdkOk = false;
+
+function initMap(){
+  if(!window.TMap){ return false; }
+  sdkOk = true;
+  map = new TMap.Map(document.getElementById('map'), {
+    center: new TMap.LatLng(37.4, 97.4),
+    zoom: 6,
+    minZoom: 5,
+    maxZoom: 16,
+  });
+  buildLayers();
+  document.getElementById('err').style.display = 'none';
+  setTimeout(()=>{
+    try{
+      const bd = new TMap.LatLngBounds(new TMap.LatLng(33.9,92.9), new TMap.LatLng(40.6,102.2));
+      map.fitBounds(bd);
+    }catch(e){}
+  },350);
+  return true;
+}
+
+function buildLayers(){
+  const lineGeos = LINES.map(l => ({ id:'L'+l.d, styleId:'L'+l.d, paths:l.pts.map(p=>new TMap.LatLng(p[0],p[1])) }));
+  const lineStyles = {};
+  LINES.forEach(l => { lineStyles['L'+l.d] = new TMap.PolylineStyle({ color:COLORS[l.d-1], width:6, borderWidth:0, lineCap:'round', lineJoin:'round' }); });
+  new TMap.MultiPolyline({ map, styles:lineStyles, geometries:lineGeos });
+
+  const spurStyles = {};
+  SPURS.forEach(s => { spurStyles['sp'+s.d] = new TMap.PolylineStyle({ color:COLORS[s.d-1], width:3, borderWidth:0, dashArray:[6,6], lineCap:'round' }); });
+  new TMap.MultiPolyline({
+    map,
+    styles: spurStyles,
+    geometries: SPURS.map(s => ({ id:'sp'+s.d, styleId:'sp'+s.d, paths:s.pts.map(p=>new TMap.LatLng(p[0],p[1])) })),
+  });
+
+  /* SVG data-URI 图标（SDK 不渲染 HTML content，改用 src 图标） */
+  function svgUri(svg){ return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); }
+
+  /* 方向箭头 */
+  const arrowMarkers = [];
+  const arrowStyles = {};
+  LINES.forEach((l, li) => {
+    let mi=0, mx=0;
+    for(let i=0;i<l.pts.length-1;i++){
+      const d = dist(l.pts[i], l.pts[i+1]);
+      if(d>mx){ mx=d; mi=i; }
+    }
+    const a = l.pts[mi], b = l.pts[mi+1];
+    const mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+    const deg = bearing(a,b);
+    const c = COLORS[l.d-1];
+    arrowStyles['ar'+li] = new TMap.MarkerStyle({
+      width:18, height:18, anchor:{x:9,y:9},
+      src: svgUri(`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><g transform="rotate(${deg} 9 9)"><path d="M2 2 L16 9 L2 16 Z" fill="${c}" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round"/></g></svg>`)
+    });
+    arrowMarkers.push({ id:'A'+l.d, styleId:'ar'+li, position: new TMap.LatLng(mid[0],mid[1]) });
+  });
+  new TMap.MultiMarker({ map, styles: arrowStyles, geometries: arrowMarkers });
+
+  /* 住宿点：数字徽章图标 + 城市文字标签 */
+  const stayStyles = {};
+  const stayGeos = STAYS.map((s, si) => {
+    const c = COLORS[s.d-1];
+    stayStyles['st'+si] = new TMap.MarkerStyle({
+      width:32, height:32, anchor:{x:16,y:16},
+      src: svgUri(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" fill="${c}" stroke="#ffffff" stroke-width="3"/><text x="16" y="21.5" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle" font-family="PingFang SC, sans-serif">${s.d}</text></svg>`)
+    });
+    return { id:s.id, styleId:'st'+si, position:new TMap.LatLng(s.xy[0],s.xy[1]) };
+  });
+  const stayLayer = new TMap.MultiMarker({ map, styles: stayStyles, geometries: stayGeos });
+  new TMap.MultiLabel({
+    map,
+    styles:{ city:new TMap.LabelStyle({ color:'#2a2d34', size:13 }) },
+    geometries: STAYS.map(s => ({
+      id:'lb'+s.id, styleId:'city',
+      position:new TMap.LatLng(s.xy[0]-0.005, s.xy[1]),
+      content: s.name
+    }))
+  });
+
+  /* 景区点 */
+  const scStyles = {
+    sc_opt: new TMap.MarkerStyle({
+      width:16, height:16, anchor:{x:8,y:8},
+      src: svgUri('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><circle cx="8" cy="8" r="6" fill="#ffffff" stroke="#9aa0a6" stroke-width="2" stroke-dasharray="3 2"/></svg>')
+    })
+  };
+  const scGeos = SCENICS.map(p => {
+    const opt = isOpt(p);
+    if(!opt && !scStyles['sc'+p.d]){
+      const c = COLORS[p.d-1];
+      scStyles['sc'+p.d] = new TMap.MarkerStyle({
+        width:16, height:16, anchor:{x:8,y:8},
+        src: svgUri(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><circle cx="8" cy="8" r="6.5" fill="${c}" stroke="#ffffff" stroke-width="2.2"/></svg>`)
+      });
+    }
+    return { id:p.id, styleId:opt?'sc_opt':'sc'+p.d, position:new TMap.LatLng(p.xy[0],p.xy[1]) };
+  });
+  markers = new TMap.MultiMarker({ map, styles: scStyles, geometries: scGeos });
+
+  markers.on('click', e => {
+    const g = e.geometry;
+    if(!g || !g.id) return;
+    const p = SCENICS.find(x => x.id === g.id);
+    if(!p) return;
+    centerTo(p.xy, 10.5);
+    const day = p.d;
+    showPopup(p.xy,
+      `<div class="ppw">
+        <div class="t"><span style="color:${COLORS[day-1]}">●</span> ${p.name}</div>
+        <div><span class="tg">D${day} 行程内</span><span class="tg">建议 ${p.time}</span></div>
+        <div class="nt">${p.note}</div>
+      </div>`);
+  });
+  stayLayer.on('click', e => {
+    const g = e.geometry; if(!g||!g.id) return;
+    const s = STAYS.find(x=>x.id===g.id);
+    const card = document.querySelector('.card[data-d="'+(s?s.d:1)+'"]');
+    centerTo([g.position.lat,g.position.lng], 9.5);
+    if(card){ selectCard(card, true, false); }
+  });
+
+  STAYS.forEach(s => allGeoms.push({type:'stay', d:s.d, id:s.id, name:s.name, xy:s.xy}));
+  SCENICS.forEach(p => allGeoms.push({type:'sc', d:p.d, id:p.id, name:p.name, xy:p.xy}));
+  renderChips();
+}
+
+function isOpt(p){ return p.id==='p4' || p.id==='p11b' || p.id==='p11c'; }
+
+function dist(a,b){ const dx=a[0]-b[0], dy=a[1]-b[1]; return Math.sqrt(dx*dx+dy*dy); }
+function bearing(a,b){
+  const R = Math.PI/180;
+  const y = Math.sin((b[1]-a[1])*R) * Math.cos(b[0]*R);
+  const x = Math.cos(a[0]*R)*Math.sin(b[0]*R) - Math.sin(a[0]*R)*Math.cos(b[0]*R)*Math.cos((b[1]-a[1])*R);
+  return (Math.atan2(y,x)*180/Math.PI + 360) % 360;
+}
+
+function showPopup(xy, html){
+  closePopup();
+  infoWin = new TMap.InfoWindow({
+    map,
+    position: new TMap.LatLng(xy[0], xy[1]),
+    content: html,
+    enableCustom: true,
+    offset: {x:0, y:-18},
+  });
+}
+function closePopup(){ if(infoWin){ try{infoWin.close();}catch(e){} infoWin=null; } }
+
+function renderChips(){
+  const box = document.getElementById('chips');
+  allGeoms.forEach(g => {
+    const el = document.createElement('div');
+    el.className = 'chip'; el.dataset.id = g.id; el.dataset.xy = g.xy.join(',');
+    el.style.setProperty('--dc', COLORS[g.d-1]);
+    el.innerHTML = `<span class="dot ${g.type==='stay'?'stay':''}" style="background:${g.type==='stay'?COLORS[g.d-1]:'#fff'};border:${g.type==='stay'?'none':'2.5px solid '+COLORS[g.d-1]}"></span>${g.type==='stay'?'D'+g.d+' · ':''}${g.name}`;
+    el.onclick = () => onChip(g);
+    box.appendChild(el);
+  });
+}
+
+function onChip(g){
+  centerTo(g.xy, g.type==='stay'?9.5:11);
+  if(g.type==='stay'){
+    const card = document.querySelector('.card[data-d="'+g.d+'"]');
+    if(card){ selectCard(card, true, false); }
+  } else {
+    const p = SCENICS.find(x=>x.id===g.id);
+    if(p) showPopup(p.xy, `<div class="ppw">
+        <div class="t"><span style="color:${COLORS[p.d-1]}">●</span> ${p.name}</div>
+        <div><span class="tg">D${p.d} 行程内</span><span class="tg">建议 ${p.time}</span></div>
+        <div class="nt">${p.note}</div></div>`);
+  }
+}
+
+function centerTo(xy, zoom){
+  closePopup();
+  map.setCenter(new TMap.LatLng(xy[0], xy[1]));
+  map.setZoom(zoom);
+}
+function selectCard(card, scroll, recenter){
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  if(scroll) card.scrollIntoView({behavior:'smooth', block:'nearest'});
+  if(recenter !== false){
+    const xy = card.dataset.xy.split(',').map(Number);
+    centerTo(xy, 9.5);
+  }
+}
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => selectCard(card, true));
+});
+document.getElementById('btnFit').addEventListener('click', () => {
+  closePopup();
+  const bd = new TMap.LatLngBounds(new TMap.LatLng(33.9,92.9), new TMap.LatLng(40.6,102.2));
+  map.fitBounds(bd);
+});
+
+let tries = 0;
+(function wait(){
+  if(window.TMap && initMap()) return;
+  tries++;
+  if(tries > 8){
+    document.getElementById('err').style.display='flex';
+    return;
+  }
+  setTimeout(wait, 400);
+})();
+</script>
+</body>
+</html>
