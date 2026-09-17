@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青甘大环线 · 11 日行程合集（海报 + 详情）</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#f7f6f1;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif}
+  .bar{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:10px;padding:10px 16px;background:#1d2749;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .bar .bt{border:1px solid rgba(255,255,255,.35);background:transparent;color:#e8e3f2;border-radius:999px;padding:7px 18px;font-size:14px;cursor:pointer;letter-spacing:1px}
+  .bar .bt.on{background:#ffd37a;border-color:#ffd37a;color:#1d2749;font-weight:700}
+  .bar .ttl{color:#fff;font-weight:800;font-size:15px;letter-spacing:1px;margin-right:6px}
+  .bar .hint{margin-left:auto;color:rgba(255,255,255,.55);font-size:12px}
+  .fwrap{overflow-x:auto}
+  iframe{display:block;border:0;width:100%;background:#fff}
+  #fPoster{width:1080px;margin:0 auto}
+  @media (max-width:1080px){ #fPoster{margin:0} }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="ttl">青甘大环线 · 11日</span>
+  <button class="bt on" id="bPoster" onclick="show('p')">🖼 海报版</button>
+  <button class="bt" id="bDoc" onclick="show('d')">📄 详情版</button>
+  <span class="hint">同一份行程 · 两种视图</span>
+</div>
+
+<div class="fwrap"><iframe id="fPoster" title="海报版"></iframe></div>
+<div class="fwrap" id="wrapDoc" hidden><iframe id="fDoc" title="详情版"></iframe></div>
+
+<script type="text/html" id="tplPoster"><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>青甘大环线 11 日海报</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1080px;background:#fffdf6}
+  body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:#2a2d34;-webkit-font-smoothing:antialiased}
+  .hero{position:relative;height:360px;background:linear-gradient(168deg,#1d2749 0%,#2c3a6b 46%,#7a4a38 100%);overflow:hidden}
+  .hero .stars{position:absolute;inset:0;opacity:.8}
+  .hero .ttl{position:absolute;top:64px;left:70px;z-index:3}
+  .hero .cn{font-size:90px;font-weight:800;color:#fff;letter-spacing:8px;line-height:1.02;text-shadow:0 4px 22px rgba(0,0,0,.35)}
+  .hero .cn em{font-style:normal;color:#ffd37a}
+  .hero .sub{font-size:22px;color:#e8e3f2;letter-spacing:4px;margin-top:12px;font-weight:600}
+  .hero .meta{display:flex;gap:11px;margin-top:22px;flex-wrap:wrap}
+  .hero .chip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;padding:6px 16px;font-size:16px;letter-spacing:1px}
+  .hero .chip b{color:#ffd37a;font-weight:700}
+  .hero .ring{position:absolute;right:64px;top:64px;width:210px;height:210px;border-radius:50%;border:2px dashed rgba(255,255,255,.35);z-index:2}
+  .hero .ring .rt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:#fff}
+  .hero .ring .rt b{font-size:40px;color:#ffd37a;line-height:1}
+  .hero .ring .rt span{font-size:14px;letter-spacing:2px;margin-top:8px}
+  .mnt1{position:absolute;left:0;right:0;bottom:0;height:110px;z-index:1}
+  .mnt2{position:absolute;left:-40px;right:-40px;bottom:0;height:150px;z-index:0;opacity:.9}
+  .mapband{position:relative;background:linear-gradient(180deg,#f6e8cd,#fbf3e2);padding:6px 0 0}
+  .sec-title{display:flex;align-items:baseline;gap:14px;padding:18px 56px 4px}
+  .sec-title h2{font-size:34px;font-weight:800;letter-spacing:2px;color:#31364a}
+  .sec-title .tip{font-size:14px;color:#8a7a5c}
+  .sec-title .tip b{color:#c74e2a}
+  .hotels{background:#fffdf6;padding:6px 40px 6px}
+  .itin{background:#fffdf6;padding:4px 40px 2px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:9px 16px;margin-top:10px}
+  .irow{background:#fff;border:1.2px solid #ece4d2;border-left:4px solid var(--dc,#c74e2a);border-radius:12px;padding:8px 13px 7px;box-shadow:0 1px 4px rgba(120,90,40,.04)}
+  .irow .it{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .irow .i1{font-weight:800;color:var(--dc,#c74e2a);font-size:14px}
+  .irow .i2{font-size:11.5px;color:#9a8b6b;background:#f6efe0;border-radius:4px;padding:0 6px;white-space:nowrap}
+  .irow .i3{font-size:13px;font-weight:700;color:#33384c}
+  .irow .i4{margin-left:auto;font-size:10.5px;color:#a49a86;white-space:nowrap}
+  .irow .tgs{margin-top:4px;line-height:1.8}
+  .irow .tgs .t{display:inline-block;background:#f5efe2;border-radius:5px;padding:0 8px;font-size:12px;color:#5a4a30;margin:1px 3px 0 0}
+  .irow .tgs .t b{color:#c74e2a;font-weight:800}
+  .irow .tgs .t.alt{background:#f0f0ea;color:#8b8b84}
+  .irow .tgs .t.alt b{color:#7a7a72}
+  .irow.wide{grid-column:1/-1}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 18px;margin-top:10px}
+  .hcard{background:#fff;border:1.5px solid #ece4d2;border-radius:16px;padding:11px 18px 10px;position:relative;box-shadow:0 2px 6px rgba(120,90,40,.05)}
+  .hcard .top{display:flex;align-items:center;gap:9px}
+  .hcard .dn{background:#c74e2a;color:#fff;font-weight:800;font-size:13px;border-radius:7px;padding:1px 8px;letter-spacing:.5px;white-space:nowrap}
+  .hcard .nm{font-size:17px;font-weight:800;color:#33384c;white-space:nowrap}
+  .hcard .alt{font-size:11.5px;color:#9a8b6b;background:#f6efe0;border-radius:5px;padding:1px 7px;margin-left:auto;white-space:nowrap}
+  .hrow{display:flex;align-items:baseline;margin-top:5px;font-size:14.5px}
+  .hrow .p{color:#c74e2a;font-weight:800;width:76px;flex:none}
+  .hrow .t{color:#4a4f5e}
+  .hrow .t b{color:#2a2d34}
+  .hrow .t .mark{color:#c7901d;font-weight:700}
+  .hcard .note{font-size:11.5px;color:#a0916d;margin-top:4px;background:#faf5e9;border-radius:6px;padding:3px 8px}
+  .hcard.mine{background:linear-gradient(135deg,#fff3e0,#fffdf6)}
+  .remind{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 52px 6px;background:#fffdf6}
+  .rm{background:#f4efe4;border-radius:12px;padding:10px 13px;font-size:13px;line-height:1.5;color:#54442a}
+  .rm b{display:block;font-size:14.5px;margin-bottom:2px}
+  .rm1{background:#fdeee4}.rm1 b{color:#c74e2a}
+  .rm2{background:#e8f0fb}.rm2 b{color:#2f6fb2}
+  .rm3{background:#e7f4ec}.rm3 b{color:#2f7d4f}
+  .rm4{background:#f1eafa}.rm4 b{color:#7b5ea7}
+  .foot{background:#fffdf6;padding:13px 60px 18px;text-align:center;color:#a49a86;font-size:12px;letter-spacing:.5px}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <svg class="stars" viewBox="0 0 1080 360" preserveAspectRatio="none">
+    <g fill="#ffffff">
+      <circle cx="90" cy="46" r="1.6" opacity=".9"/><circle cx="170" cy="90" r="1" opacity=".6"/>
+      <circle cx="330" cy="34" r="1.3" opacity=".8"/><circle cx="470" cy="80" r="1" opacity=".5"/>
+      <circle cx="620" cy="44" r="1.6" opacity=".9"/><circle cx="760" cy="100" r="1.2" opacity=".6"/>
+      <circle cx="940" cy="52" r="1.5" opacity=".8"/><circle cx="1010" cy="120" r="1" opacity=".5"/>
+      <circle cx="250" cy="130" r="1" opacity=".5"/><circle cx="560" cy="130" r="1.2" opacity=".6"/>
+      <circle cx="840" cy="150" r="1" opacity=".4"/><circle cx="60" cy="180" r="1" opacity=".5"/>
+      <circle cx="520" cy="200" r="1" opacity=".4"/><circle cx="1000" cy="210" r="1.2" opacity=".5"/>
+    </g>
+  </svg>
+  <div class="ttl">
+    <div class="cn">青甘大环线<em>·</em>11日</div>
+    <div class="sub">9.26 西宁集合 → 环青海·柴达木·青藏线 → 10.6 返西宁</div>
+    <div class="meta">
+      <div class="chip">🗓 <b>9.26–10.6</b></div>
+      <div class="chip">🛣 全程 <b>~3400 KM</b></div>
+      <div class="chip">⛰ 最高住宿 <b>4270m</b></div>
+      <div class="chip">🏞 沙漠·雅丹·雪山·圣湖</div>
+    </div>
+  </div>
+  <div class="ring"><div class="rt"><b>11</b><span>天 10 晚<br>环线自驾</span></div></div>
+  <svg class="mnt2" viewBox="0 0 1080 150" preserveAspectRatio="none">
+    <path d="M0,150 L0,92 L90,44 L170,78 L250,28 L330,86 L420,52 L505,90 L590,38 L680,84 L770,56 L855,96 L945,66 L1030,102 L1080,78 L1080,150 Z" fill="#6b3f33"/>
+  </svg>
+  <svg class="mnt1" viewBox="0 0 1080 110" preserveAspectRatio="none">
+    <path d="M0,110 L0,70 L120,36 L240,66 L340,24 L460,62 L580,40 L700,74 L820,52 L930,78 L1080,50 L1080,110 Z" fill="#f2e2c4"/>
+  </svg>
+</div>
+
+<!-- ================= 线路图 ================= -->
+<div class="mapband">
+  <div class="sec-title"><h2>🗺 行程路线</h2><div class="tip">徽章 = 当日住宿点（编号为第 N 天）· 橙色路线 = 逐日行车 · 沿途小气泡 = 景区</div></div>
+  <svg viewBox="0 0 1080 890" width="1080" style="display:block">
+    <rect x="0" y="0" width="1080" height="890" fill="#f8efdb"/>
+    <text x="120" y="452" font-size="26" fill="#d9c69d" font-style="italic" font-weight="700" opacity=".8" transform="rotate(-18 150 470)">柴达木盆地</text>
+    <text x="190" y="596" font-size="17" fill="#c8b390" font-style="italic" letter-spacing="6">昆仑山脉</text>
+    <text x="622" y="196" font-size="17" fill="#c8b390" font-style="italic" letter-spacing="6">祁连山脉</text>
+
+    <!-- 青海湖 -->
+    <ellipse cx="705" cy="452" rx="112" ry="50" fill="#bfe0ef" stroke="#8fbcd4" stroke-width="2.5" transform="rotate(-7 705 452)"/>
+    <text x="705" y="449" font-size="17" fill="#4d7f9c" text-anchor="middle" font-weight="700">青海湖</text>
+    <text x="705" y="470" font-size="10.5" fill="#6b98b2" text-anchor="middle">海拔3196m</text>
+
+    <!-- ===== 主路线（白描底 + 橙色线） ===== -->
+    <g fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" opacity=".95">
+      <path d="M844,495 C815,448 770,410 707,343"/>
+      <path d="M707,343 C696,318 712,292 733,276"/>
+      <path d="M733,276 C560,246 400,186 234,161"/>
+      <path d="M234,161 C185,200 150,240 122,285"/>
+      <path d="M122,285 C140,380 190,455 251,516"/>
+      <path d="M251,516 C275,590 300,650 329,698"/>
+      <path d="M329,698 C400,700 470,682 535,660"/>
+      <path d="M535,660 C600,632 680,586 760,545"/>
+      <path d="M760,545 C742,508 724,492 748,464 C770,438 812,452 844,495"/>
+    </g>
+    <g fill="none" stroke="#d3542a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M844,495 C815,448 770,410 707,343"/>
+      <path d="M707,343 C696,318 712,292 733,276"/>
+      <path d="M733,276 C560,246 400,186 234,161"/>
+      <path d="M234,161 C185,200 150,240 122,285"/>
+      <path d="M122,285 C140,380 190,455 251,516"/>
+      <path d="M251,516 C275,590 300,650 329,698"/>
+      <path d="M329,698 C400,700 470,682 535,660"/>
+      <path d="M535,660 C600,632 680,586 760,545"/>
+      <path d="M760,545 C742,508 724,492 748,464 C770,438 812,452 844,495"/>
+    </g>
+
+    <!-- 方向箭头 -->
+    <g fill="#d3542a">
+      <polygon points="703,270 722,288 690,290" transform="rotate(-20 706 279)"/>
+      <polygon points="430,170 452,178 430,192" transform="rotate(-8 441 181)"/>
+      <polygon points="128,238 148,250 120,260" transform="rotate(55 134 249)"/>
+      <polygon points="215,470 236,470 224,492" transform="rotate(85 226 477)"/>
+      <polygon points="332,706 352,700 342,722" transform="rotate(46 342 709)"/>
+      <polygon points="660,500 681,496 670,517" transform="rotate(128 671 509)"/>
+    </g>
+
+    <!-- 可选绕行：金塔胡杨林（灰虚线） -->
+    <g stroke="#b9b2a2" stroke-width="2.5" stroke-dasharray="6 6" fill="none">
+      <path d="M560,230 C540,220 520,212 505,208"/>
+    </g>
+    <g transform="translate(482,196)">
+      <rect x="-4" y="-4" width="26" height="26" rx="7" fill="#fff" stroke="#b9b2a2" stroke-width="2" stroke-dasharray="3 2"/>
+      <text x="9" y="16" font-size="14" fill="#8f8778" text-anchor="middle">🌳</text>
+      <text x="13" y="40" font-size="10.5" fill="#8f8778" text-anchor="middle">金塔胡杨林</text>
+      <text x="13" y="52" font-size="9.5" fill="#aaa290" text-anchor="middle">(可选绕行)</text>
+    </g>
+
+    <!-- ===== 住宿节点（徽章编号 = 第 N 天） ===== -->
+    <g font-family="inherit" text-anchor="middle">
+      <!-- D1+D11 西宁 -->
+      <circle cx="844" cy="495" r="21" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="844" y="493" font-size="15" fill="#fff" font-weight="800">1</text>
+      <circle cx="844" cy="495" r="4.6" fill="#ffd37a" stroke="#fff" stroke-width="1.6"/>
+      <text x="844" y="542" font-size="13.5" fill="#3a3f4f" font-weight="800">西宁 · 9/26 到 · 10/6 回</text>
+      <!-- D2 祁连 -->
+      <circle cx="707" cy="343" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="707" y="342" font-size="14.5" fill="#fff" font-weight="800">2</text>
+      <text x="707" y="316" font-size="14.5" fill="#3a3f4f" font-weight="800">祁连县 9/27</text>
+      <!-- D3 张掖 -->
+      <circle cx="733" cy="276" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="733" y="275" font-size="14.5" fill="#fff" font-weight="800">3</text>
+      <text x="690" y="252" font-size="14.5" fill="#3a3f4f" font-weight="800" text-anchor="end">张掖 9/28</text>
+      <!-- D4 敦煌（两晚） -->
+      <circle cx="234" cy="161" r="21" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="234" y="160" font-size="15" fill="#fff" font-weight="800">4</text>
+      <text x="280" y="154" font-size="14.5" fill="#3a3f4f" font-weight="800" text-anchor="start">敦煌 9/29–30 两晚</text>
+      <!-- D6 冷湖 -->
+      <circle cx="122" cy="285" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="122" y="284" font-size="14.5" fill="#fff" font-weight="800">6</text>
+      <text x="122" y="326" font-size="14.5" fill="#3a3f4f" font-weight="800">冷湖镇 10/1</text>
+      <!-- D7 格尔木 -->
+      <circle cx="251" cy="516" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="251" y="515" font-size="14.5" fill="#fff" font-weight="800">7</text>
+      <text x="286" y="524" font-size="14.5" fill="#3a3f4f" font-weight="800" text-anchor="start">格尔木 10/2</text>
+      <!-- D8 曲麻莱 -->
+      <circle cx="329" cy="698" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="329" y="697" font-size="14.5" fill="#fff" font-weight="800">8</text>
+      <text x="360" y="722" font-size="14.5" fill="#3a3f4f" font-weight="800" text-anchor="start">曲麻莱 10/3</text>
+      <!-- D9 玛多 -->
+      <circle cx="535" cy="660" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="535" y="659" font-size="14.5" fill="#fff" font-weight="800">9</text>
+      <text x="535" y="700" font-size="14.5" fill="#3a3f4f" font-weight="800">玛多县 10/4</text>
+      <!-- D10 共和 -->
+      <circle cx="760" cy="545" r="20" fill="#c74e2a" stroke="#fff" stroke-width="4"/>
+      <text x="760" y="544" font-size="14.5" fill="#fff" font-weight="800">10</text>
+      <text x="793" y="578" font-size="14.5" fill="#3a3f4f" font-weight="800" text-anchor="start">共和 10/5</text>
+    </g>
+
+    <!-- ===== 沿线景区气泡 ===== -->
+    <g font-family="inherit">
+      <g transform="translate(796,430)">
+        <rect x="-62" y="-14" width="124" height="26" rx="13" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="5" font-size="12" fill="#555a68" text-anchor="middle">达坂山垭口观景台</text>
+      </g>
+      <g transform="translate(760,300)">
+        <rect x="-42" y="-13" width="84" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">卓尔山 · 阿柔大寺</text>
+      </g>
+      <g transform="translate(656,320)">
+        <rect x="-62" y="-13" width="124" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">七彩丹霞日落 19:20</text>
+      </g>
+      <g transform="translate(308,196)">
+        <rect x="-88" y="-26" width="176" height="50" rx="11" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="-8" font-size="12" fill="#555a68" text-anchor="middle">莫高窟（A类票提前抢）</text>
+        <text x="0" y="10" font-size="12" fill="#555a68" text-anchor="middle">鸣沙山月牙泉 · 日落+星空</text>
+      </g>
+      <line x1="236" y1="196" x2="238" y2="185" stroke="#e5d5b6" stroke-width="1.5"/>
+      <g transform="translate(172,262)">
+        <rect x="-55" y="-13" width="110" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">黑独山 · 胭脂山</text>
+      </g>
+      <g transform="translate(186,470)">
+        <rect x="-82" y="-13" width="164" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">察尔汗盐湖 · 万丈盐桥</text>
+      </g>
+      <g transform="translate(344,560)">
+        <rect x="-78" y="-28" width="156" height="54" rx="11" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="-9" font-size="12" fill="#555a68" text-anchor="middle">昆仑山口 4768m</text>
+        <text x="0" y="9" font-size="12" fill="#555a68" text-anchor="middle">可可西里·玉珠峰</text>
+      </g>
+      <g transform="translate(480,600)">
+        <rect x="-70" y="-13" width="140" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">两湖一碑 · 牛头碑</text>
+      </g>
+      <g transform="translate(452,760)">
+        <rect x="-75" y="-13" width="150" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">阿尼玛卿 · 玛卿岗日 6282m</text>
+      </g>
+      <!-- 本次新增小景点气泡 -->
+      <g transform="translate(760,385)">
+        <rect x="-75" y="-13" width="150" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">峨堡古城·9号公路机位</text>
+      </g>
+      <g transform="translate(830,240)">
+        <rect x="-92" y="-13" width="184" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">9号公路·野牛沟·黑河大峡谷</text>
+      </g>
+      <g transform="translate(135,208)">
+        <rect x="-80" y="-13" width="160" height="24" rx="12" fill="#fff" stroke="#dcd5c2" stroke-dasharray="3 2"/>
+        <text x="0" y="4" font-size="11" fill="#8f8778" text-anchor="middle">阿克塞·多坝沟胡杨峡(可选)</text>
+      </g>
+      <g transform="translate(290,755)">
+        <rect x="-72" y="-13" width="144" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">尕朵觉沃神山·通天河</text>
+      </g>
+      <g transform="translate(470,640)">
+        <rect x="-85" y="-13" width="170" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">巴颜喀拉山垭口·星星海</text>
+      </g>
+      <g transform="translate(615,585)">
+        <rect x="-52" y="-13" width="104" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#555a68" text-anchor="middle">冬格措纳湖</text>
+      </g>
+      <!-- 收官日 青海湖东南岸 二郎剑 + 日月山 -->
+      <g transform="translate(772,466)">
+        <rect x="-62" y="-13" width="124" height="24" rx="12" fill="#fff" stroke="#e5d5b6"/>
+        <text x="0" y="4" font-size="11.5" fill="#4d7f9c" text-anchor="middle">青海湖·二郎剑</text>
+      </g>
+      <g transform="translate(842,452)">
+        <rect x="-44" y="-12" width="88" height="22" rx="11" fill="#fff" stroke="#dcd5c2" stroke-dasharray="3 2"/>
+        <text x="0" y="4" font-size="11" fill="#8f8778" text-anchor="middle">日月山(可选)</text>
+      </g>
+    </g>
+
+    <!-- 图例 -->
+    <g transform="translate(48,808)">
+      <rect x="0" y="-18" width="330" height="58" rx="12" fill="#ffffff" opacity=".88"/>
+      <text x="18" y="-2" font-size="12.5" fill="#6a614f">🧭 徽章编号＝第几天（D1 9/26 … D11 10/6）</text>
+      <text x="18" y="20" font-size="12.5" fill="#6a614f">沿线小气泡＝景区 · 箭头＝行车方向</text>
+      <text x="18" y="38" font-size="11" fill="#a49a86">橙色段共 10 个行车日，全程逆时针一个环</text>
+    </g>
+    <text x="1024" y="872" font-size="11" fill="#b0a689" text-anchor="end">位置为大致示意，非精确地理坐标</text>
+  </svg>
+</div>
+
+<!-- ================= 每日行程 ================= -->
+<div class="itin">
+  <div class="sec-title"><h2>🗓 每日行程 · 景点与游玩时长</h2><div class="tip">灰色为可选 · <b>红字为建议游玩时间</b></div></div>
+  <div class="g2">
+
+    <div class="irow" style="--dc:#c74e2a">
+      <div class="it"><span class="i1">D1 · 9/26 六</span><span class="i2">西宁集合</span><span class="i3">休整日</span><span class="i4">宿 西宁 2260m</span></div>
+      <div class="tgs"><span class="t alt">莫家街/水井巷夜市 <b>1–2h</b>（可选）</span><span class="t">提车 · 采购补给</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#2f9e6f">
+      <div class="it"><span class="i1">D2 · 9/27 日</span><span class="i2">西宁→祁连</span><span class="i3">281KM</span><span class="i4">宿 祁连县 2760m</span></div>
+      <div class="tgs"><span class="t">达坂山观景台 <b>30min</b></span><span class="t">峨堡古城·9号公路长焦机位 <b>30min</b></span><span class="t">祁连草原随停</span><span class="t">阿柔大寺 <b>45min</b></span><span class="t alt">伦布夏果景区·小拉洞峡谷 <b>1.5h</b>（可选）</span><span class="t alt">卓尔山日落 <b>2h</b>（可选）</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#1f6fb2">
+      <div class="it"><span class="i1">D3 · 9/28 一</span><span class="i2">祁连→肃南→张掖</span><span class="i3">~250KM 经9号公路</span><span class="i4">宿 张掖 1480m</span></div>
+      <div class="tgs"><span class="t">卓尔山 <b>2–3h</b>（7:30 晨光）</span><span class="t">祁连9号公路·G213 <b>沿途随停</b>（青甘小独库）</span><span class="t">野牛沟乡 <b>30min</b></span><span class="t">黑河大峡谷观景台 <b>45min</b></span><span class="t alt">冰沟丹霞 <b>1.5h</b>（可选）</span><span class="t">七彩丹霞 <b>2.5–3h</b>（16:30 进 · 日落19:20）</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#a05ab5">
+      <div class="it"><span class="i1">D4 · 9/29 二</span><span class="i2">张掖→敦煌</span><span class="i3">600KM 纯赶路</span><span class="i4">宿 敦煌① 1140m</span></div>
+      <div class="tgs"><span class="t">G30 高速 8:00 前出发 · 轮换开</span><span class="t alt">金塔胡杨林 <b>2h</b>（可选绕行）</span><span class="t alt">沙州夜市 <b>1.5h</b></span></div>
+    </div>
+
+    <div class="irow" style="--dc:#cf4260">
+      <div class="it"><span class="i1">D5 · 9/30 三</span><span class="i2">敦煌一整天</span><span class="i3">市区 ~50KM</span><span class="i4">宿 敦煌② 或 阿克塞</span></div>
+      <div class="tgs"><span class="t">莫高窟 <b>3h</b>（A 类票 8:30 最早场）</span><span class="t">鸣沙山月牙泉 <b>3.5h</b>（15:30 进 · 日落19:15）</span><span class="t">万人星空演唱会</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#e0a61c">
+      <div class="it"><span class="i1">D6 · 10/1 四</span><span class="i2">敦煌→冷湖</span><span class="i3">~280KM+绕行</span><span class="i4">宿 冷湖镇 2800m</span></div>
+      <div class="tgs"><span class="t alt">阿克塞石油小镇·博罗转井 <b>45min</b>（可选）</span><span class="t alt">多坝沟胡杨峡 <b>2–3h</b>（可选·末段砂石路·10月中胡杨全黄）</span><span class="t">黑独山·胭脂山 <b>1.5h</b>（日落前 1h 最佳）</span><span class="t">冷湖观星 <b>1h+</b>（暗夜保护区）</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#3aa24d">
+      <div class="it"><span class="i1">D7 · 10/2 五</span><span class="i2">冷湖→格尔木</span><span class="i3">~470KM 最长驾驶日</span><span class="i4">宿 格尔木 2780m</span></div>
+      <div class="tgs"><span class="t">火星一号公路 <b>2h</b></span><span class="t">俄博梁牌坊</span><span class="t">南八仙雅丹 <b>45min</b></span><span class="t">察尔汗盐湖 <b>2h</b>（16:30 前进园）</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#4f6fc9">
+      <div class="it"><span class="i1">D8 · 10/3 六</span><span class="i2">格尔木→可可西里→曲麻莱</span><span class="i3">~380KM</span><span class="i4">宿 曲麻莱 4176m⚠️</span></div>
+      <div class="tgs"><span class="t">昆仑圣泉 <b>30min</b></span><span class="t">玉珠峰观景台 <b>30min</b></span><span class="t">昆仑山口 4768m <b>30min</b></span><span class="t">不冻泉·可可西里观景台·索南达杰站 <b>30–60min</b></span></div>
+    </div>
+
+    <div class="irow" style="--dc:#8a6f2f">
+      <div class="it"><span class="i1">D9 · 10/4 日</span><span class="i2">曲麻莱→玛多</span><span class="i3">~340KM</span><span class="i4">宿 玛多县 4270m⚠️</span></div>
+      <div class="tgs"><span class="t">尕朵觉沃神山远观</span><span class="t">通天河河谷随停</span><span class="t">巴颜喀拉山垭口 4824m <b>20min</b></span><span class="t">星星海湖群随停</span><span class="t">两湖一碑（鄂陵湖+牛头碑）<b>2–3h</b>（需包车）</span></div>
+    </div>
+
+    <div class="irow" style="--dc:#19a3a0">
+      <div class="it"><span class="i1">D10 · 10/5 一</span><span class="i2">玛多→共和</span><span class="i3">~330KM</span><span class="i4">宿 共和 2850m</span></div>
+      <div class="tgs"><span class="t">冬格措纳湖（花石峡·免费）<b>1h</b></span><span class="t">阿尼玛卿观景（玛卿岗日 6282m）<b>1–1.5h</b></span><span class="t">草原牧场随停</span></div>
+    </div>
+
+    <div class="irow wide" style="--dc:#c0653f">
+      <div class="it"><span class="i1">D11 · 10/6 二 收官</span><span class="i2">共和→青海湖→西宁</span><span class="i3">~360KM</span><span class="i4">傍晚到西宁 · 无住宿</span></div>
+      <div class="tgs"><span class="t">青海湖二郎剑 <b>2h</b>（或环湖东路免费机位）</span><span class="t alt">日月山 <b>1h</b>（可选）</span><span class="t">16:00 前回西宁 · 莫家街手抓羊肉收官</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= 住宿 ================= -->
+<div class="hotels">
+  <div class="sec-title"><h2>🏨 沿途住宿速览（你们自选清单）</h2><div class="tip">9.26–10.6 共 10 晚 · 已按你们提供的酒店整理 · 标注★为供氧房</div></div>
+  <div class="grid">
+    <div class="hcard mine">
+      <div class="top"><span class="dn" style="background:#8a6f2f">D1 · 9/26 六</span><span class="nm">西宁 · 集合首晚</span><span class="alt">2260m</span></div>
+      <div class="hrow"><span class="p">入住</span><span class="t">汉庭酒店（西宁火车站·中发源城市广场店）</span></div>
+      <div class="hrow"><span class="p">返程</span><span class="t">10/6 回西宁如需过夜，可续订同一家</span></div>
+      <div class="note">📌 集合日：提车检查 · 采购零食饮水 · 红景天已吃 7 天 · 明早 8:30 出发</div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D2 · 9/27 日</span><span class="nm">祁连县</span><span class="alt">2760m</span></div>
+      <div class="hrow"><span class="p">首选</span><span class="t">宜必思·尚品酒店</span></div>
+      <div class="hrow"><span class="p">备选</span><span class="t">祁连天境卓尔国际饭店</span></div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D3 · 9/28 一</span><span class="nm">张掖</span><span class="alt">1480m</span></div>
+      <div class="hrow"><span class="p">首选</span><span class="t">宜尚酒店</span></div>
+      <div class="hrow"><span class="p">备选</span><span class="t">全季酒店</span></div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D4 · 9/29 二</span><span class="nm">敦煌 · 第 1 晚</span><span class="alt">1140m</span></div>
+      <div class="hrow"><span class="p">首选</span><span class="t">Fonso·方所酒店 / 敦煌夜市绿洲岛隐酒店</span></div>
+      <div class="hrow"><span class="p">备选</span><span class="t">SPEEL 设计师酒店 · 三家任选并连住两晚</span></div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D5 · 9/30 三</span><span class="nm">敦煌第 2 晚 或 阿克塞</span><span class="alt">见方案</span></div>
+      <div class="hrow"><span class="p">方案A</span><span class="t">续住 9/29 同店（看星空演唱会到 20:30）</span></div>
+      <div class="hrow"><span class="p">方案B</span><span class="t">当晚赴阿克塞 +110KM：艾菲酒店 / 西霖酒店</span></div>
+      <div class="note">📌 选 B 则 10/1 去冷湖少开 100km；选 A 则 10/1 早起出发</div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D6 · 10/1 四</span><span class="nm">冷湖镇</span><span class="alt">2800m</span></div>
+      <div class="hrow"><span class="p">首选</span><span class="t">星穹秘境品质酒店 / 茫崖星际品质酒店</span></div>
+      <div class="hrow"><span class="p">备选</span><span class="t">美豪酒店（冷湖店）★有氧气</span></div>
+      <div class="note">📌 国庆夜房源少，已订请确认；晚间观星带厚衣服</div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D7 · 10/2 五</span><span class="nm">格尔木</span><span class="alt">2780m</span></div>
+      <div class="hrow"><span class="p">首选</span><span class="t">宜必思富氧酒店 ★有氧气</span></div>
+      <div class="hrow"><span class="p">备选</span><span class="t">桔子酒店</span></div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D8 · 10/3 六</span><span class="nm">曲麻莱</span><span class="alt">4176m ⚠️</span></div>
+      <div class="hrow"><span class="p">入住</span><span class="t">曲麻莱松赞酒店 ★有氧气</span></div>
+      <div class="hrow"><span class="p">注意</span><span class="t">夜不洗澡 · 血氧&lt;80% 下撤</span></div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D9 · 10/4 日</span><span class="nm">玛多县</span><span class="alt">4270m ⚠️</span></div>
+      <div class="hrow"><span class="p">入住</span><span class="t">玛多扎陵湖酒店 ★有氧气</span></div>
+      <div class="hrow"><span class="p">注意</span><span class="t">全程最高宿：不洗澡早睡</span></div>
+    </div>
+    <div class="hcard">
+      <div class="top"><span class="dn">D10 · 10/5 一</span><span class="nm">共和 / 恰卜恰</span><span class="alt">2850m</span></div>
+      <div class="hrow"><span class="p">首选</span><span class="t">汉庭酒店</span></div>
+      <div class="hrow"><span class="p">备选</span><span class="t">如家酒店 · neo</span></div>
+    </div>
+  </div>
+  <div class="hcard mine" style="margin-top:14px;border-left:6px solid #8a6f2f">
+    <div class="top"><span class="dn" style="background:#8a6f2f">D11 · 10/6 二</span><span class="nm">收官 · 回西宁</span><span class="alt">环湖 ~360km</span></div>
+    <div class="hrow"><span class="p">8:00</span><span class="t">共和出发 → 青海湖二郎剑 2h → 倒淌河/日月山（可选）</span></div>
+    <div class="hrow"><span class="p">16:00</span><span class="t">回到西宁 · 莫家街手抓羊肉收官 🐑</span></div>
+    <div class="note">📌 无住宿：当晚返程，或续订 D1 的汉庭（西宁火车站·中发源广场店）再住一晚</div>
+  </div>
+</div>
+
+<!-- ================= 提醒 ================= -->
+<div class="remind">
+  <div class="rm rm1"><b>⚡ 最紧急 · 莫高窟 A 类票</b>提前 30 天放票，9/30 场次已开售，抢不到只能看 B 类 4 窟</div>
+  <div class="rm rm2"><b>🛏 立刻锁房</b>国庆段：敦煌 9/29–30 连住两晚、冷湖 10/1 最紧俏，先订可免费取消的</div>
+  <div class="rm rm3"><b>🫁 高反防线</b>红景天提前 7 天吃；格尔木备氧气 4–6 罐；曲麻莱/玛多夜不洗澡，血氧&lt;80% 下撤</div>
+  <div class="rm rm4"><b>🧭 收官 D11 = 10/6</b>共和→二郎剑→日月山→西宁 一天环湖收尾，不赶夜路；10 月夜间 -5 ~ -10℃ 羽绒服必带</div>
+</div>
+<div class="foot">本图为行程示意图 · 位置为大致参考 · 住宿酒店为你们自选清单（9.26 更新）· 无人机/油桶/离线地图按需准备 · 祝一路顺风 🚗💨</div>
+
+</body>
+</html>
+</script>
+<script type="text/html" id="tplDoc"><!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="mw1MUiHsO9fDfq0GXAKIRF">
+<head data-page-node-id="HaHGN0FgG6e6gNlhQnNFQ4">
+<meta charset="UTF-8" data-page-node-id="O0YQ4Cr5g1GNjbuANBD7mV">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="e8Rt8MgDWZGsMGss3Uu6xB">
+<title>青甘大环线 11 日行程规划（自选酒店 · 全景点版）</title>
+<style>
+  :root{
+    --bg:#f7f6f1;--panel:#ffffff;--ink:#1f2933;--ink-soft:#52606d;--line:#e4e7eb;
+    --accent:#b8472d;--warn:#c0392b;--warn-soft:#fdecea;--ok:#2f7d4f;--ok-soft:#e6f4ec;--hi:#fff8e7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif;line-height:1.65}
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 28px 80px}
+  h1{font-size:28px;margin:0 0 8px;letter-spacing:.5px}
+  h2{font-size:20px;margin:48px 0 14px;padding-left:12px;border-left:4px solid var(--accent)}
+  h3{font-size:16px;margin:20px 0 8px;color:var(--accent)}
+  .sub{color:var(--ink-soft);font-size:14px;margin-bottom:26px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:14px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .grid{display:grid;gap:14px}
+  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--ink-soft);letter-spacing:.5px}
+  .stat .v{font-size:21px;font-weight:600;margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:#faf8f3;font-weight:600;color:var(--ink-soft);font-size:12px;letter-spacing:.4px}
+  tr:hover td{background:#fbfaf6}
+  .warn{color:var(--warn);font-weight:600}
+  .ok{color:var(--ok);font-weight:600}
+  .callout{background:var(--warn-soft);border-left:4px solid var(--warn);padding:14px 18px;border-radius:6px;margin:14px 0}
+  .callout.gold{background:var(--hi);border-left-color:#c99700}
+  .callout.ok{background:var(--ok-soft);border-left-color:var(--ok)}
+  .callout .t{font-weight:700;margin-bottom:6px}
+  .day{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin:16px 0;overflow:hidden}
+  .day-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:12px 18px;background:#faf8f3;border-bottom:1px solid var(--line)}
+  .day-head .d{font-size:17px;font-weight:700;color:var(--accent)}
+  .day-head .r{font-size:14px}
+  .day-head .m{margin-left:auto;font-size:13px;color:var(--ink-soft)}
+  .day-body{padding:14px 18px}
+  .kv{font-size:13.5px;margin:4px 0}
+  .kv b{color:var(--ink)}
+  .tag{display:inline-block;background:#f0ede6;border-radius:4px;padding:1px 7px;font-size:12px;margin:2px 3px 2px 0;color:#5b4400}
+  .hotel{display:grid;grid-template-columns:110px 1fr 1fr;gap:8px;margin:10px 0 0;padding-top:8px;border-top:1px dashed #e7e0d0;font-size:13.5px}
+  .hotel .h{font-weight:700;color:var(--accent);padding-top:2px}
+  .hotel .h.alt{color:var(--ink-soft)}
+  .ox{display:inline-block;background:#eaf6ef;color:var(--ok);border-radius:4px;padding:0 6px;font-size:11.5px;font-weight:700;margin-left:4px}
+  ul.check{list-style:none;padding:0;margin:6px 0 0}
+  ul.check li{padding:4px 0 4px 22px;position:relative}
+  ul.check li:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12px;text-align:center}
+  @media (max-width:720px){
+    .grid-4,.grid-2{grid-template-columns:1fr 1fr}
+    .hotel{grid-template-columns:1fr}
+    table{font-size:12.5px}
+    h1{font-size:22px}
+  }
+</style>
+</head>
+<body data-page-node-id="yP8W1K2iDIE9BFYNmuGi5u">
+<div class="wrap" data-page-node-id="pnSwtsxHA2HJ21GTrdWkFQ">
+
+<h1 data-page-node-id="QrBU9QAV6s3tkPTO7juZrx">青甘大环线 · 11 日行程规划（自选酒店 · 全景点版）</h1>
+<div class="sub" data-page-node-id="E8DJXcKyaaRfX6Pfj55Mby">9/26（六）西宁集合 → 10/6（二）返西宁 · 10 晚 11 天 · 约 3400 KM · 住宿已全部替换为你们选定的酒店 · 小景点已按你们 Excel 补全</div>
+
+<div class="grid grid-4" data-page-node-id="icoJJlxUtEVdKlBmxFxNJb">
+  <div class="stat" data-page-node-id="HPidqVScAbYO6dEl8j7gNV"><div class="k" data-page-node-id="gAqmne3Lswo40HSIzrJvzS">总天数</div><div class="v" data-page-node-id="IwhjVnNGhNsxuHr2el7H5X">11 天 10 晚</div></div>
+  <div class="stat" data-page-node-id="9LdHozvbwXPMQfD5bnhB11"><div class="k" data-page-node-id="ZsINDFD89ungCwEU2q766l">日期</div><div class="v" data-page-node-id="B5oXyUQ73JNSZtA5Y66SGZ">9.26 – 10.6</div></div>
+  <div class="stat" data-page-node-id="ixB252epNAXUUvz8TPJ1ql"><div class="k" data-page-node-id="KOue7ReRPti6i8P2IMFmJs">总里程</div><div class="v" data-page-node-id="q3Win5G5EsEtE5Jf6cFbrC">~3400 KM</div></div>
+  <div class="stat" data-page-node-id="AJvmHJ5OPlnZUWHcDFxXaz"><div class="k" data-page-node-id="OeWjNOcZDmKd6JZ4twA85a">最高海拔住宿</div><div class="v" data-page-node-id="yWBEdogSk73mslIa0fxRJU">4270m 玛多</div></div>
+</div>
+
+<div class="callout gold" data-page-node-id="yfF152TJAH187bnSbDAMog">
+  <div class="t" data-page-node-id="u2C9wxdlGYgHuklzsiuGZa">⚡ 今天就要做的三件事（距出发 18 天）</div>
+  <ul class="check" data-page-node-id="uAdC8bmljuHeTHpsWGOBzu">
+    <li data-page-node-id="V17c6yvgy0bi099gnz9btg"><b data-page-node-id="xS6PyCHDnfCLodgpOLnFia">立刻抢莫高窟 A 类票（9/30 场次）</b>——提前 30 天放票已开售；抢不到只能 B 类应急票（只看 4 个窟）</li>
+    <li data-page-node-id="lHmZyJN9RYkzYdGWGTVUCg"><b data-page-node-id="q9CknFdeqpjxf4BU22WqSw">按自选清单锁房</b>——敦煌 9/29–30、冷湖 10/1（国庆夜）、曲麻莱/玛多（氧房有限）最早满房；9/26 西宁汉庭顺带订好</li>
+    <li data-page-node-id="lOTfnnCB9SUwHCfu8Yrcud"><b data-page-node-id="Iqu6G2JV6YEafzJLE6cQNC">红景天开始吃</b>（提前 7–10 天起效）；车辆保养约在 9/19 当周</li>
+  </ul>
+</div>
+
+<div class="callout ok" data-page-node-id="YgqgLqHhv5oiw7hfAASNu3">
+  <div class="t" data-page-node-id="e01q8tsvRmLoNVK4OWCBgW">✔ 本次更新（v4 → v5）</div>
+  <ul class="check" data-page-node-id="u6efpZGEBDOAlF81mCetGL">
+    <li data-page-node-id="9fPWY0trbiCSESlPhdWzML">删除此前全部联网检索的酒店推荐，<b data-page-node-id="E3G4QG06xH9mv8jk0fECbz">10 晚住宿全部替换为你们提供的酒店清单</b>（按每晚列于下方行程卡）</li>
+    <li data-page-node-id="OJV4hAuaq47Argf9X2WLVT">9/30（D5）按你们的方案保留两种选择：A 续住敦煌；B 当晚赴阿克塞（艾菲/西霖），次日去冷湖少开 100km</li>
+    <li data-page-node-id="1itvjsuqPNYNuqEHEQLuSw">供氧房已标注 <span class="ox" data-page-node-id="y6DHBDJSf8F4BniO8SpEVP">有氧气</span>：冷湖美豪、格尔木宜必思富氧、曲麻莱松赞、玛多扎陵湖</li>
+    <li>9/18 更新：按你们的 Excel <b>补全沿途小景点</b>——峨堡古城·9号公路机位、伦布夏果、祁连9号公路(G213)·野牛沟·黑河大峡谷·冰沟丹霞、阿克塞石油小镇·多坝沟胡杨峡、可可西里观景台、尕朵觉沃神山·通天河·巴颜喀拉山垭口·星星海、冬格措纳湖（D3 改走 9 号公路线，原扁都口随停删除）</li>
+  </ul>
+</div>
+
+<h2 data-page-node-id="RczW4lavRVbK2Cn5hGUID2">一、11 日逐日行程（含每日住宿 · 自选酒店）</h2>
+
+<!-- D1 -->
+<div class="day" data-page-node-id="HsUZxOnlDwfeXPA7p9Pmtj">
+  <div class="day-head" data-page-node-id="Y5rNSNRZXpjjDBUrbG2eFy">
+    <span class="d" data-page-node-id="GIwkOxc1MX8ZfvVMGaTQLV">D1 · 9/26 周六</span>
+    <span class="r" data-page-node-id="4FRunzestne2ksBQ3Kyxao">抵达西宁 · 集合日</span>
+    <span class="m" data-page-node-id="kO0qwZz6zD4CEsTxmZSH16">休整 · 宿西宁（2260m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="kHH2Z2Ihwscb3yKOYIUwk1">
+    <div class="kv" data-page-node-id="4yVs1GGXljInAXRMEbvV2X"><b data-page-node-id="PGlRWZPgriUhanW9uCFCVR">安排：</b>落地 → 入住 → 提车检查 → 超市补给（水、零食、自热饭）</div>
+    <div class="kv" data-page-node-id="WYTDYKrwCRDnkJyT9U2keH"><b data-page-node-id="wylVjtglUyeaZNEXgK7URr">可选：</b><span class="tag" data-page-node-id="Qbb2pA6C3auQ4Hs8CDOyps">莫家街/水井巷夜市 1–2h</span></div>
+    <div class="kv" data-page-node-id="dPO2nzDHsBigm4zH9qflcC"><b data-page-node-id="0HKZ6mNW9AKoGq1FEaC57q">提示：</b>首晚别熬夜；红景天已连吃 7 天；明早 8:30 出发。</div>
+    <div class="hotel" data-page-node-id="DMeKukCCITAtusqUPhb9xN">
+      <div class="h" data-page-node-id="tAvSgEWvJeXhCLmd4aMktM">9/26 住宿</div>
+      <div data-page-node-id="lOTSvgmPdHnYKmXoZHCDTX">汉庭酒店（西宁火车站·中发源城市广场店）</div>
+      <div class="h alt" data-page-node-id="rVlYEGhP00hHIDK1SALTRZ">返程可续</div>
+      <div style="grid-column:2/4" data-page-node-id="HUmZsnLYV6prmFX1jMG4DH">10/6 收官回西宁如需过夜，可续订同一家</div>
+    </div>
+  </div>
+</div>
+
+<!-- D2 -->
+<div class="day" data-page-node-id="1tFgDwt76rEPuhYOEHxrHe">
+  <div class="day-head" data-page-node-id="g5CkBvEsFCWdMF4uOhKxh7">
+    <span class="d" data-page-node-id="H615OU8QelNEVSyJfCa5yB">D2 · 9/27 周日</span>
+    <span class="r" data-page-node-id="QKfg1kRCmf0QucNFhzE9tZ">西宁 → 祁连县</span>
+    <span class="m" data-page-node-id="2QfI5naqZKLgQdvRlUuH5I">281 KM · 约 5h · 宿祁连（2760m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="YzHYgwdQzxyb9NoFKAszue">
+    <div class="kv" data-page-node-id="Y1QcP9OA3C83Ryk1Ho7cKH"><b data-page-node-id="DbFrm2ORrYvGXF0R5JK5EC">路线：</b>西宁 → 大通 → 达坂山观景台 → 门源 → 峨堡古城 → 阿柔大寺 → 祁连县</div>
+    <div class="kv" data-page-node-id="8PVK4qgWncQgjgmLGo4obI"><b data-page-node-id="xjQIn04nSF8RrRh5oepaZi">游玩安排：</b>
+      <span class="tag" data-page-node-id="eFoTYars7y1v2geM5adjpc">达坂山观景台 30min</span>
+      <span class="tag">峨堡古城·9号公路长焦机位 30min</span>
+      <span class="tag" data-page-node-id="SFkTfSJ8G0Jl63otRUHMKA">祁连草原沿线随停</span>
+      <span class="tag" data-page-node-id="Ms3Rvca6sejZRRQ7VAB5DG">阿柔大寺 45min</span>
+      <span class="tag">伦布夏果景区（小拉洞峡谷）1.5h（可选）</span>
+      <span class="tag" data-page-node-id="dQqyuXmSLYHs95zeBDTqoI">（可选）卓尔山日落 2h</span>
+    </div>
+    <div class="kv" data-page-node-id="AuN6DfngCh64mAv0AHrcZ3"><b data-page-node-id="Ae674Iv0DAKJIjAdWsLk8R">提示：</b>首个驾驶日慢节奏，适应海拔；出发前满油。</div>
+    <div class="hotel" data-page-node-id="s1g2flOTIABu6FIlzy7PyF">
+      <div class="h" data-page-node-id="zGrd3k41HUVuFtylBEQROJ">9/27 住宿</div>
+      <div data-page-node-id="9sjjikJA9dHYnIqhiBTwuQ">宜必思·尚品酒店</div>
+      <div class="h alt" data-page-node-id="qqqg97Pgla0uA6SwefyIWc">备选</div>
+      <div data-page-node-id="TAzZOqNWj643ZZSbYHgVzz">祁连天境卓尔国际饭店</div>
+    </div>
+  </div>
+</div>
+
+<!-- D3 -->
+<div class="day" data-page-node-id="pjmVjuGwAkYk9CAmx5beWC">
+  <div class="day-head" data-page-node-id="9zycytkXFb93EwwLadbufo">
+    <span class="d" data-page-node-id="lCVyaPsdrzf7BGuxwv5tKe">D3 · 9/28 周一</span>
+    <span class="r" data-page-node-id="dzviY8PyYhfUUgH3p899up">祁连 → 肃南 → 张掖（9号公路线）</span>
+    <span class="m" data-page-node-id="1Zn2Mu6QuH7AqjGQhmdijR">~250 KM · 约 5h · 宿张掖（1480m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="UpzAeqAV7aGEB14mTGohAy">
+    <div class="kv" data-page-node-id="GKGixvevNx8ZW45jrLEs5h"><b data-page-node-id="wEiRC2m63ZML4UTqzOz2B0">路线：</b>卓尔山 → 祁连9号公路 G213（野牛沟 → 黑河大峡谷）→ 肃南 →（可选 冰沟丹霞）→ 张掖七彩丹霞 → 市区</div>
+    <div class="kv" data-page-node-id="pHgvMF091dZ8TykMRnZ8Dn"><b data-page-node-id="BANfg4FWRkpNS6zw0p8bXB">游玩安排：</b>
+      <span class="tag" data-page-node-id="eOTQeKpRSZSGCFXpYipgVX">卓尔山 2–3h（7:30 前看晨光/云海）</span>
+      <span class="tag">祁连9号公路 G213 沿途随停（青甘小独库，雪山/峡谷/林海）</span>
+      <span class="tag">野牛沟乡 30min</span>
+      <span class="tag">黑河大峡谷观景台 45min</span>
+      <span class="tag">冰沟丹霞 1.5h（可选）</span>
+      <span class="tag" data-page-node-id="cFFRjYTFAXxFESihSokRCI">七彩丹霞 2.5–3h（16:30 进，4 号台看日落 19:20）</span>
+    </div>
+    <div class="kv" data-page-node-id="DNYpHFcyEWJa1G1J7ezS92"><b data-page-node-id="LhHcT6IgPOo4CCwidccp0T">提示：</b>9号公路弯多，会车减速靠右、勿弯道占道超车；山区信号弱，提前下离线地图；海拔低，今晚好好洗澡吃顿好的。</div>
+    <div class="hotel" data-page-node-id="t5P1se7FYt4hylHWQ5APmd">
+      <div class="h" data-page-node-id="LjrlUedk0zetsboy4IEaSX">9/28 住宿</div>
+      <div data-page-node-id="pZwo9NoyZsbvFDTt8Ki2c1">宜尚酒店</div>
+      <div class="h alt" data-page-node-id="DLJybZHtFCslEgolx6w4Sh">备选</div>
+      <div data-page-node-id="dcq6kpoprvwXFHH4jDVqhn">全季酒店</div>
+    </div>
+  </div>
+</div>
+
+<!-- D4 -->
+<div class="day" data-page-node-id="EG055B3i5j4KSZ5oan5Vi0">
+  <div class="day-head" data-page-node-id="JVTVCaI1EfqB1gFpfYVYCS">
+    <span class="d" data-page-node-id="ibmzpe28EYup4NW8fJ3Q0N">D4 · 9/29 周二</span>
+    <span class="r" data-page-node-id="U7WaHWg8huHR51GDdTPTkr">张掖 → 敦煌（纯赶路日）</span>
+    <span class="m" data-page-node-id="df2ZbHQ35cELZFUzpKzc9t">~600 KM · 约 6.5h · 宿敦煌①（1140m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="fCBbwYEakkekV8CvYi75fJ">
+    <div class="kv" data-page-node-id="JDBKVp8ezEOnksxGVaRuRX"><b data-page-node-id="sOg29nvIFaiD0tRl7X0kqT">路线：</b>张掖 → G30 连霍高速 → 酒泉/嘉峪关（不下高速）→ 玉门 → G3011 → 敦煌</div>
+    <div class="kv" data-page-node-id="MfGgd9KZm7scBRxWTIcxzt"><b data-page-node-id="5M8sd4d57ab5v1YclDqwBA">节奏：</b><b data-page-node-id="vAs7HyPI48NtGbFyHG5RMC">8:00 前出城</b>，服务区午餐 40min，16:30–17:00 到敦煌；全程高速，<b data-page-node-id="WR4SIFdhp8jkUvHnnIEFP0">两人轮换开</b>。</div>
+    <div class="kv" data-page-node-id="RxJV4vwBiWfhJF9VMhoiRg"><b data-page-node-id="69dRX2rqhITCQEozoawc8z">傍晚可选：</b><span class="tag" data-page-node-id="2fLvGjFaU34C5ykGi59lsp">沙州夜市 1.5h（驴肉黄面、杏皮水）</span></div>
+    <div class="kv" data-page-node-id="MFe9UxhSwDzn9icNu5H9bY"><b data-page-node-id="ztVZwH8eFqPLHKFEHBXhiy">备忘：</b>若 12:00 前过酒泉可绕 <b data-page-node-id="WRT9vFldLiX6mudwVWB7IU">金塔胡杨林</b>（+60KM 往返 2h，10 月上旬正金黄）。</div>
+    <div class="hotel" data-page-node-id="bfPYspLJ75EPIuMCSvA5eC">
+      <div class="h" data-page-node-id="JEAlRw4LVz8OfYS7av6Sfq">9/29 住宿</div>
+      <div data-page-node-id="b6Q3V1Iq065euNG4m01W06">Fonso·方所酒店 / 敦煌夜市绿洲岛隐酒店</div>
+      <div class="h alt" data-page-node-id="EZx49fnTE0JxmEGVeloZS3">备选</div>
+      <div data-page-node-id="YQWAmtlOF5Cup4wXL9pCJv">SPEEL 设计师酒店 · 三家任选其一，连住到 9/30 免搬行李</div>
+    </div>
+  </div>
+</div>
+
+<!-- D5 -->
+<div class="day" data-page-node-id="oXVJ5C2EZjHD7QTVfdSrHx">
+  <div class="day-head" data-page-node-id="H0M9Q984iaCvueDOatyuTk">
+    <span class="d" data-page-node-id="Ogl7e9g9alSB7HYlObCAtZ">D5 · 9/30 周三 ★ 敦煌一整天</span>
+    <span class="r" data-page-node-id="p2IdE6RQ0hn7jYDaDJD9Wv">莫高窟 + 鸣沙山月牙泉</span>
+    <span class="m" data-page-node-id="3AkLmVJiv0VOF0KV8EL71a">市区 ~50KM · 宿敦煌② 或 阿克塞</span>
+  </div>
+  <div class="day-body" data-page-node-id="eoXvQvXzpNzldHbDz3vAmw">
+    <div class="kv" data-page-node-id="zXJmDudlWEdMXAiqWSytEH"><b data-page-node-id="EwO6CkpLJYjVN4jtC47Nqf">上午：</b><span class="tag" data-page-node-id="QRQdd7qK7wGtVTDfaWtk3P">莫高窟 3h（预约 8:30–9:00 最早场，数字中心+8 洞窟）</span></div>
+    <div class="kv" data-page-node-id="fwQkNYkrfqCQrwXOf3znZJ"><b data-page-node-id="ffsw26gYLexFBlWlW33IZs">中午：</b>回市区午餐 + 午休 1.5–2h（鸣沙山白天暴晒）。</div>
+    <div class="kv" data-page-node-id="5JRQgOyjuPMaLh5ZW1TGPs"><b data-page-node-id="RFXT8Bgn0vh2pweiwKjxQt">下午–晚上：</b>
+      <span class="tag" data-page-node-id="8V5A9uCPBgF7c7EhlgbTZh">鸣沙山月牙泉 3.5h（15:30–16:00 进场：骆驼+爬沙山，日落 19:15）</span>
+      <span class="tag" data-page-node-id="6vPQDdeu2SjREKrzMAGs7g">万人星空演唱会（免费，可留到 20:30）</span>
+    </div>
+    <div class="kv" data-page-node-id="CQDpvyAPswHgeyfpDSoKDC"><b data-page-node-id="rVc82Wt97LwIPgIV92slEn">住宿两个方案（你们的清单）：</b></div>
+    <div class="hotel" data-page-node-id="kDDNp2EWULitN4j4XkpPJ4">
+      <div class="h" data-page-node-id="Vm6V22hZ03MS4EMkT084ln">方案 A</div>
+      <div data-page-node-id="nT3sHAGXUnBYpTJMTIu6y1">续住 9/29 同店（Fonso·方所 / 绿洲岛隐 / SPEEL）<br data-page-node-id="zYMVqhK6bfNpzKEGioYDvU"><span style="color:var(--ink-soft)" data-page-node-id="9MG0b71F6e1wYudPdfGeZL">看完星空演唱会直接回房，最省心</span></div>
+      <div class="h alt" data-page-node-id="TyC5QijQy9AuBWfGtHHvMa">方案 B</div>
+      <div data-page-node-id="pCT278UYfj7Fjpy8JmJ6kc">当晚赴阿克塞（约 +110KM / 1.5h）：艾菲酒店 / 西霖酒店<br data-page-node-id="QCmgydUttbDjBzvOIDrOJZ"><span style="color:var(--ink-soft)" data-page-node-id="MtWAfefyewzq40GzJLGWwG">次日 10/1 去冷湖少开 100km，更轻松</span></div>
+    </div>
+    <div class="kv warn" data-page-node-id="Bv4iGcxxYKIRhsnKnTb7KG">⚠️ 莫高窟 A 类票是全程唯一不可替代预约（日限 6000），9/30 场次已开售，立刻去“莫高窟参观预约网”抢。</div>
+  </div>
+</div>
+
+<!-- D6 -->
+<div class="day" data-page-node-id="rFnoorfvEOwp0EVUkDkW7p">
+  <div class="day-head" data-page-node-id="2NSqeP80dJwUH3R9w60k5H">
+    <span class="d" data-page-node-id="KEv5oyHKTffIEawcfAuMp0">D6 · 10/1 周四（国庆）</span>
+    <span class="r" data-page-node-id="k6fE0mfPNIGWV2IcCtWaZQ">敦煌（或阿克塞）→ 黑独山 → 冷湖</span>
+    <span class="m" data-page-node-id="72eU4v1PrLC0dBO6CwEc5g">敦煌出发 ~280KM（+可选绕行）· 约 4h · 宿冷湖（2800m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="24tIp5K7hPdpsmc2e34mYs">
+    <div class="kv" data-page-node-id="K9C8mHOzcFFsyBeAGpcs6R"><b data-page-node-id="9L1mVk4cHgJEbOVec9W7y9">路线：</b>敦煌/阿克塞 →（可选：多坝沟胡杨峡 · 阿克塞石油小镇）→ 苏干湖远观 → 黑独山·胭脂山 → 冷湖镇</div>
+    <div class="kv" data-page-node-id="nJxx2c4alav5hamnQgz7HN"><b data-page-node-id="prYHM8X4Dw0nZjwoUC7fC2">游玩安排：</b>
+      <span class="tag">阿克塞石油小镇·博罗转井 45min（可选）</span>
+      <span class="tag">多坝沟胡杨峡 2–3h（可选·末段约20km砂石路建议SUV·10月中胡杨全黄）</span>
+      <span class="tag" data-page-node-id="qJHTa5U6227saviAbPTVjv">黑独山·胭脂山 1.5h（“人间月球”，17:00 后光线最佳）</span>
+      <span class="tag" data-page-node-id="eNHsaH9nguXF3dWA429Zsm">晚冷湖观星 1h+（国际暗夜保护区）</span>
+    </div>
+    <div class="kv warn" data-page-node-id="61iY0t5FhTdMCFlPqHa6Rf">⚠️ 冷湖镇极小、房源有限；夜间可至 0℃ 以下。</div>
+    <div class="hotel" data-page-node-id="t1RysTHKImBCLFAqasVoSL">
+      <div class="h" data-page-node-id="2MMfMJyR9GghOHvzk4CCbv">10/1 住宿</div>
+      <div data-page-node-id="GJgCGj1wG193BC81wCbcY9">星穹秘境品质酒店 / 茫崖星际品质酒店</div>
+      <div class="h alt" data-page-node-id="8VbybZEBKAwQvqGq49DzlZ">备选</div>
+      <div data-page-node-id="CL72hENiB89Q1Gp0mSIbHB">美豪酒店（冷湖店）<span class="ox" data-page-node-id="T8gAhoXyFAE1UBgesG1aN9">有氧气</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- D7 -->
+<div class="day" data-page-node-id="32AhQtQxaf7zPyGzhEiF0Q">
+  <div class="day-head" data-page-node-id="8asjGwzBh4SxGCrCEwxqHJ">
+    <span class="d" data-page-node-id="0fXdos6kavEtgokE1ENjFr">D7 · 10/2 周五</span>
+    <span class="r" data-page-node-id="7wpo0GLizmmRGFbMY2e8xj">冷湖 → 火星一号公路 → 察尔汗盐湖 → 格尔木</span>
+    <span class="m" data-page-node-id="1Lc2p8nf6UwquMS98qjCGu">~470 KM · 约 7–7.5h · 宿格尔木（2780m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="KGYjkFftK7X1UwSxYYun5d">
+    <div class="kv" data-page-node-id="KrhIAtIAkBeEDEKqdqbroR"><b data-page-node-id="HOIyKd8kO7NOBGDxIMewkr">路线：</b>冷湖 → 火星一号公路 → 俄博梁牌坊 → 南八仙雅丹 → G315 → 察尔汗盐湖 → 格尔木</div>
+    <div class="kv" data-page-node-id="kBCUDeCJxHZQGDHEkcWd5i"><b data-page-node-id="A0C6QVmJ5fMEEXps7BI7O3">游玩安排：</b>
+      <span class="tag" data-page-node-id="eWcCtnGBTkMBj7KcBxmbuu">火星一号公路 2h（无人区穿越）</span>
+      <span class="tag" data-page-node-id="mTfdAekbkXwNs4vLabkrjb">俄博梁：四驱+穿越费可进，两驱牌坊打卡</span>
+      <span class="tag" data-page-node-id="e67TDB1VbTmGMn3QDQFxbD">南八仙雅丹 45min</span>
+      <span class="tag" data-page-node-id="l3yEqoR94OGDrPrBKUzdBV">察尔汗盐湖 2h（<b data-page-node-id="7zVS2h1P2XJgh7RWlw4gNA">16:30 前必须入园</b>）</span>
+    </div>
+    <div class="kv warn" data-page-node-id="ahWVYeGJrMG0FjDlUnt4dL">⚠️ 全程最长驾驶日：<b data-page-node-id="vDVLJriahaAtNk8bh6Srtm">8:00 前出发</b>；冷湖满油出发，火星公路无补给无信号。</div>
+    <div class="kv" data-page-node-id="Tu6PESCQ3xDrAc0FdgkQHu"><b data-page-node-id="MwnCPP7ytJ0f8DnxdkwpIU">格尔木任务：</b>满油+20L 油桶 · 氧气瓶 4–6 罐 · 超市大采购 · 查胎压（明天起进高原）。</div>
+    <div class="hotel" data-page-node-id="gzWougPtVsgtGnVW4N0IEA">
+      <div class="h" data-page-node-id="3m0RoIv3H1bLrZoi1YvOkf">10/2 住宿</div>
+      <div data-page-node-id="Umj9SM30yCIaFLfPiJNwuL">宜必思富氧酒店（格尔木）<span class="ox" data-page-node-id="s23mWe0Qv5D5OHb6k7RGhT">有氧气</span></div>
+      <div class="h alt" data-page-node-id="BmVbuQyLEKh3FU1JAAa46C">备选</div>
+      <div data-page-node-id="iwf1cWHVZV2QVTbTks9uep">桔子酒店</div>
+    </div>
+  </div>
+</div>
+
+<!-- D8 -->
+<div class="day" data-page-node-id="c0974m1UZcDTH9PbmL8tEG">
+  <div class="day-head" data-page-node-id="lXAC649iyWQ1gi4XjR8EY8">
+    <span class="d" data-page-node-id="ohhB4niJOR5CHpm5v5CGvn">D8 · 10/3 周六</span>
+    <span class="r" data-page-node-id="YWrIMrOytXKH7EjaHpQE77">格尔木 → 可可西里 → 曲麻莱</span>
+    <span class="m" data-page-node-id="otsO7SemfyH0Vf88im8qdi">~380 KM · 约 6.5h · 宿曲麻莱（4176m）⚠️</span>
+  </div>
+  <div class="day-body" data-page-node-id="s1kuvyEkrWiVMuyYxwFEFm">
+    <div class="kv" data-page-node-id="XBUP7NDjrL0rEmB6PktFWq"><b data-page-node-id="dQ4iQ9jn7nO2e0cKb0hWM9">路线：</b>格尔木 → 昆仑圣泉 → 西大滩·玉珠峰观景台 → 昆仑山口(4768m) → 不冻泉·可可西里观景台·索南达杰保护站 → 曲麻莱</div>
+    <div class="kv" data-page-node-id="9Yk9X7mDAWnofqIIKk9Agn"><b data-page-node-id="4JmjBGqPfOVSTymwxmJ6bs">游玩安排：</b>
+      <span class="tag" data-page-node-id="aQVZbo9U4MTDN3qTrnRpFM">昆仑圣泉 30min</span>
+      <span class="tag" data-page-node-id="F1y7q4dzNOnmvUTIONVpeD">玉珠峰观景台 30min（6178m 雪山正面）</span>
+      <span class="tag" data-page-node-id="iTOQiFZqSE68Azf7jUnRjK">昆仑山口碑 30min</span>
+      <span class="tag">不冻泉·可可西里观景台·索南达杰站 30–60min（运气好可见藏羚羊/野牦牛）</span>
+    </div>
+    <div class="kv warn" data-page-node-id="mDgdNsGDDIDMPMxWFfFlWu">⚠️ 海拔急升 2780→4768→4176：不剧烈运动、<b data-page-node-id="9fB2Yd0JSwnYYRMcgY6ivc">晚上不洗澡</b>、多喝水；血氧持续 &lt;80% 下撤。</div>
+    <div class="hotel" data-page-node-id="NU2N0QUGLWbeIueyRInqoh">
+      <div class="h" data-page-node-id="2UYJv7jngQ45DMahsHTEMU">10/3 住宿</div>
+      <div data-page-node-id="AINGQVlp9QTPGNzpwGQ3RN">曲麻莱松赞酒店 <span class="ox" data-page-node-id="WXS1lVj0eO7KSdUUtvHy3N">有氧气</span></div>
+      <div class="h alt" data-page-node-id="tn2dEEtXYoTeb3ugm8aq7Y">注意</div>
+      <div data-page-node-id="PO8q6423xR1hv0BKg7PTCF">氧房数量有限，尽早确认；晚间早点休息</div>
+    </div>
+  </div>
+</div>
+
+<!-- D9 -->
+<div class="day" data-page-node-id="ShPuNkU4UUibPZCExo2dZG">
+  <div class="day-head" data-page-node-id="XKDzvDeBDVuVxXVISR2A3i">
+    <span class="d" data-page-node-id="NAhkrFBeVA0zzQSPITPDQ6">D9 · 10/4 周日</span>
+    <span class="r" data-page-node-id="gX5BH7oFrgWu5737qbmmnK">曲麻莱 → 尕朵觉沃 → 巴颜喀拉 → 两湖一碑 → 玛多</span>
+    <span class="m" data-page-node-id="sY8En1ggpuCNMcETpAZkvC">~340 KM · 约 5.5h · 宿玛多（4270m）⚠️</span>
+  </div>
+  <div class="day-body" data-page-node-id="73bxlYjKif9SFY5GtgBEor">
+    <div class="kv" data-page-node-id="g7YJPSoLkH8APEQ8jYVChk"><b data-page-node-id="vmjdEOcSZ0M0kQ6A6OHP3A">路线：</b>曲麻莱 → 尕朵觉沃神山远观 → 通天河河谷 → 清水河 → G214 巴颜喀拉山垭口(4824m) → 星星海湖群 → 玛多 →（下午两湖一碑）</div>
+    <div class="kv" data-page-node-id="xahDXXpBfw99kAzwOCo6V4"><b data-page-node-id="xoqSfUKQ2y0D4BEsrSezJJ">游玩安排：</b>
+      <span class="tag">尕朵觉沃神山远观（藏区四大神山之一）</span>
+      <span class="tag">通天河河谷随停</span>
+      <span class="tag">巴颜喀拉山垭口 4824m 20min（黄河/长江分水岭）</span>
+      <span class="tag">星星海湖群随停</span>
+      <span class="tag" data-page-node-id="hS66nIxHZmGd3S3lA4ZZTq">两湖一碑 2–3h（鄂陵湖+牛头碑）</span>
+    </div>
+    <div class="kv warn" data-page-node-id="3IGgM0qSxYbNHpCO18jqcN">⚠️ 两湖一碑属保护区，私家车一般不让深入，需玛多包当地越野车（约 2000 元/车）；<b data-page-node-id="GsNoi0VDjbIvNQFyxbS6LC">出发前电话确认开放</b>。</div>
+    <div class="hotel" data-page-node-id="cx216ktCrIKElOgoX21jMF">
+      <div class="h" data-page-node-id="8IP2eGQgf1hmYFA34Mu0pM">10/4 住宿</div>
+      <div data-page-node-id="2VzrsNCWLU4fJZFqKetBU7">玛多扎陵湖酒店 <span class="ox" data-page-node-id="shFuoa7OvLjZSoFlHP6tnk">有氧气</span></div>
+      <div class="h alt" data-page-node-id="wlcC4JSNQw49jk1GP0oulV">注意</div>
+      <div data-page-node-id="jImZmV5fy4Wwt97CbPsva9">全程海拔最高县城：不洗澡、早睡、氧气留到夜里用</div>
+    </div>
+  </div>
+</div>
+
+<!-- D10 -->
+<div class="day" data-page-node-id="89lbKpGPfGu3ZX0O92y9n0">
+  <div class="day-head" data-page-node-id="CU1xGuxDcixHJAcFkj0tE1">
+    <span class="d" data-page-node-id="FCi6KwcQvh9xeC3cAfm9mb">D10 · 10/5 周一</span>
+    <span class="r" data-page-node-id="SLJkX8DN6Gq8nBDwLLRlks">玛多 → 阿尼玛卿 → 共和</span>
+    <span class="m" data-page-node-id="BER2E7Oo1PDVO2sXkqL8cs">~330 KM · 约 5h · 宿共和/恰卜恰（2850m）</span>
+  </div>
+  <div class="day-body" data-page-node-id="BrWA1I7fM5uMClhd63U6HL">
+    <div class="kv" data-page-node-id="d1O21Fz8fMZ1IlmqBYVqeU"><b data-page-node-id="6vcdMwzJ1D35XcrqdD5yCB">路线：</b>玛多 → 花石峡·冬格措纳湖 → 阿尼玛卿雪山观景 → 玛沁/下大武 → 共和县</div>
+    <div class="kv" data-page-node-id="dU6DGfqM8bGcenRksoBpYn"><b data-page-node-id="K2atAkznuARU43SCIXQBqk">游玩安排：</b>
+      <span class="tag">冬格措纳湖 1h（花石峡旁·免费·红草滩镶湖岸）</span>
+      <span class="tag" data-page-node-id="oJS7dmknKPKH39YYBHDFiS">阿尼玛卿观景点 1–1.5h（主峰玛卿岗日 6282m）</span>
+      <span class="tag" data-page-node-id="dfLclUCdnS4BDE8u4N6J4E">沿途草原牧场随停</span>
+    </div>
+    <div class="kv ok" data-page-node-id="VKtVRm8NFyInpF4xoZThf8">✔ 海拔回落 2850m “回血日”，今晚可洗澡；早睡——明天收官环湖回西宁。</div>
+    <div class="hotel" data-page-node-id="gumQ4c8BKHGwA6aRgMqgFy">
+      <div class="h" data-page-node-id="3TNXUH8lOext4zlJ0JZGFK">10/5 住宿</div>
+      <div data-page-node-id="OzbJpcsHjlNc7zvFBe7APW">汉庭酒店（共和）</div>
+      <div class="h alt" data-page-node-id="HecYkfdvvknwUw4V6WMdiZ">备选</div>
+      <div data-page-node-id="EukpJJFRVUe4KNtTfeEZZF">如家酒店 · neo</div>
+    </div>
+  </div>
+</div>
+
+<!-- D11 -->
+<div class="day" data-page-node-id="Jjq6GZVPMMIINN3HRRkI0F">
+  <div class="day-head" data-page-node-id="3hANJ2dYFfmwUbyIzxJS1T">
+    <span class="d" data-page-node-id="YDtscESkDYO0dYizZN3Yu1">D11 · 10/6 周二 · 收官日</span>
+    <span class="r" data-page-node-id="tpqfHXLG1HNRMGwWHPmLoZ">共和 → 青海湖 → 西宁</span>
+    <span class="m" data-page-node-id="imf2SqkNydBLEIM3mlWUF5">~360 KM · 约 5.5h · 傍晚到西宁（无住宿）</span>
+  </div>
+  <div class="day-body" data-page-node-id="izyEvrwN4lr1GOMikH1Dy9">
+    <div class="kv" data-page-node-id="JUVLt3AbDl1kVVcD8LyHy5"><b data-page-node-id="0afdwfrXcueWDPhF3DlDB1">路线：</b>共和 → 青海湖二郎剑（或环湖东路免费机位）→ 倒淌河 → 日月山（可选）→ 湟源 → 西宁</div>
+    <div class="kv" data-page-node-id="SiwDhHfZdoXcstJpeQAPco"><b data-page-node-id="9vYrA2XEuJh8B0DrFQDlHu">游玩安排：</b>
+      <span class="tag" data-page-node-id="PtOzPsdQFSE1gYh1vyhDOE">二郎剑 2h（南岸看湖，10 月草场泛金）</span>
+      <span class="tag" data-page-node-id="qbfAxjU2YDm3PiIkzF5dqs">日月山 1h（可选）</span>
+      <span class="tag" data-page-node-id="uXU4KFqPpNQlAAEUkJdzRg">16:00 前回西宁 · 莫家街手抓羊肉收官</span>
+    </div>
+    <div class="kv warn" data-page-node-id="hE33YGebYV19Q897iezCeC">⚠️ 本版不住黑马河/看日出（已合并为一天）。</div>
+    <div class="hotel" data-page-node-id="gUvszgHkqGZCOjwq65DJvN">
+      <div class="h" data-page-node-id="e3NmXgdVIJJGnyOnFrE3VC">10/6 住宿</div>
+      <div data-page-node-id="3A112sexMecA8g0ERHCDCy">返程（无住宿）</div>
+      <div class="h alt" data-page-node-id="eosMN0XEVi4pQhA5MGbcLw">如要过夜</div>
+      <div data-page-node-id="CrkuagHROIvLivutUXKsiY">续订 9/26 的汉庭酒店（西宁火车站·中发源城市广场店）</div>
+    </div>
+  </div>
+</div>
+
+<h2 data-page-node-id="Kvy7mcYoCPPg0Q5hEVeXIV">二、住宿清单总表（10 晚 · 你们自选）</h2>
+<div class="panel" data-page-node-id="j6ZMv0bkYY1LkbSq2C7VHg">
+  <table data-page-node-id="Em1Hy8OQU9uykT8A2nyK39">
+    <thead data-page-node-id="qif1NR4W0yzeseID9Az0a0"><tr data-page-node-id="YFNn0XSx0q9CV6Wug6mciJ"><th data-page-node-id="HY2GGiDSmYJCiQleZMDAxd">晚数</th><th data-page-node-id="08sBsfNiFY9XZ03tztqqaQ">城市</th><th data-page-node-id="NQZN83v03etRv8o06EQ9uC">酒店</th><th data-page-node-id="SGlq62Hp77Mkas03iFWpCn">备注</th></tr></thead>
+    <tbody data-page-node-id="SIZAee6XzuW2GVodL6zpdD">
+      <tr data-page-node-id="RMGGoELT0Q2vofsIwhGaXF"><td data-page-node-id="FPVXzaACYuqPyTAalRSchX">9/26</td><td data-page-node-id="KmUwKJ6NKCanJgZqtMJwpD">西宁</td><td data-page-node-id="yyNNFJJKn6B7BrSEdSCOAi">汉庭酒店（西宁火车站·中发源城市广场店）</td><td data-page-node-id="xEdgcQVh19SuKtjJjAA4Mt">集合首晚；10/6 可续订</td></tr>
+      <tr data-page-node-id="SMN7QJBcANMGFjlWaBETEC"><td data-page-node-id="407ZNmSHDuRrmUWPbykvZ1">9/27</td><td data-page-node-id="w5YMut5qOQgLSG5iliPpxF">祁连</td><td data-page-node-id="H8R2o9hdkbOejf4FEQJ1Zc">宜必思·尚品酒店 / 祁连天境卓尔国际饭店</td><td data-page-node-id="O2kPqdgSjPUAZRvuYeT5iB">—</td></tr>
+      <tr data-page-node-id="pLygup6AoYiJ9HFyArfudk"><td data-page-node-id="GyB0JTU0HgpXzAaKqatMaA">9/28</td><td data-page-node-id="UZ5rRIvJLF068KAgRFrXIh">张掖</td><td data-page-node-id="O2fyCeRhuKOMz0spprKrFZ">宜尚酒店 / 全季酒店</td><td data-page-node-id="kXpwBYw5C83yp2Ku4ihVSl">—</td></tr>
+      <tr data-page-node-id="FuknArqszBxbMk2vjOcCw6"><td data-page-node-id="1vfbJRnsRsKRA7v7o7WcBE">9/29</td><td data-page-node-id="YnkmwvIsYEmUvYOdbM2MlS">敦煌</td><td data-page-node-id="IfLzItxOsSFIITrRh5DNM1">Fonso·方所 / 敦煌夜市绿洲岛隐 / SPEEL 设计师</td><td data-page-node-id="PTKZEyzHc6vmDm2OdU5piM">三家任选并连住到 9/30</td></tr>
+      <tr data-page-node-id="QZS4ceYfX6J9X3AE88IQKf"><td data-page-node-id="diRoYMbFSrANSOv8NcdaA2">9/30</td><td data-page-node-id="WL1fHlK49NWBGUcwedlTJX">敦煌 或 阿克塞</td><td data-page-node-id="7gOLUVboGvHayUnwGZ7dO0">A：续住 9/29；B：艾菲酒店 / 西霖酒店</td><td data-page-node-id="I0Gap89fXIztqxhn2KLQl3">选 B 则 10/1 少开 100km</td></tr>
+      <tr data-page-node-id="V4ioyDWVi7mLFfwnAW1Mqm"><td data-page-node-id="iL8RDWMIqHkO00BfCxDScI">10/1</td><td data-page-node-id="S7ZamDDVIqFzuXJzYEXhl6">冷湖</td><td data-page-node-id="BnPtiJz0iba4V9abjfCAPK">星穹秘境品质 / 茫崖星际品质 / 美豪酒店</td><td data-page-node-id="wGYzeAHVOD8LBxxkopB5qe">美豪 <span class="ox" data-page-node-id="lWNuWNS9LGNOfUCO95jiRg">有氧气</span>；国庆夜早锁房</td></tr>
+      <tr data-page-node-id="Kw5DiKkkLJm70cvnqDTh1p"><td data-page-node-id="0J3fJalpnjMI5GMDlTEZyh">10/2</td><td data-page-node-id="TlKaGRDAKD6xUG35tsAZVU">格尔木</td><td data-page-node-id="6rgRkjusvcHuZjGbjoEYpi">宜必思富氧酒店 / 桔子酒店</td><td data-page-node-id="U6ipgBQzCWpcUup3ZPQ2Xl">宜必思 <span class="ox" data-page-node-id="rWB4vLy9DQHItiI7tXVOpO">有氧气</span>（进高原前夜）</td></tr>
+      <tr data-page-node-id="6oAz4GkBrATSSbAcGf23av"><td data-page-node-id="6ZLXqxDRt9D0FoyfzKvCH2">10/3</td><td data-page-node-id="1QC9c7qvhTPLfxx77D9LN7">曲麻莱</td><td data-page-node-id="SHpyyg7umpXkIZEyRCHTBy">曲麻莱松赞酒店</td><td data-page-node-id="RTW05VVg8UCqQMOaoCH1BA"><span class="ox" data-page-node-id="yngD8cHB6ah5NYtbfAVXjX">有氧气</span>；4176m 夜不洗澡</td></tr>
+      <tr data-page-node-id="JkbNVoGVIOlN5ajxCRW6Gn"><td data-page-node-id="gJHMdAIvx6mocFEHh8Fpnx">10/4</td><td data-page-node-id="oFJmdYV4zQfGVZXKcuWh1C">玛多</td><td data-page-node-id="Q2vyy08urbTgvRWqgw0gpc">玛多扎陵湖酒店</td><td data-page-node-id="flGcUYwEMidsgd1OyZxWuq"><span class="ox" data-page-node-id="dYPL1oURwUqZIyg3uVz3Pr">有氧气</span>；4270m 全程最高</td></tr>
+      <tr data-page-node-id="WzSXW8v2KGZxyWeNlao9nT"><td data-page-node-id="rMuJbPS8ftntONSopta3cz">10/5</td><td data-page-node-id="vVfcGWk9Y8A6nys1fRT9UJ">共和</td><td data-page-node-id="aDfBxC5LxWoFkjztwmjCtr">汉庭酒店 / 如家酒店·neo</td><td data-page-node-id="i85ox7tvKRbLSzzWkmOZOw">—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 data-page-node-id="mpUkfJSl91yR4wzrqQYU8w">三、行程强度一览（开车 vs 游玩）</h2>
+<div class="panel" data-page-node-id="wI903dBRvcmRhPiyh0IB1E">
+  <table data-page-node-id="XULhUif8rheXrSEIUWwmaO">
+    <thead data-page-node-id="dNjAygrI0ELXiIsiOu4E1w"><tr data-page-node-id="FJ2eChNfXwG6bKxUZS7pzv"><th data-page-node-id="mwzoPsIMg890bvZXWW54a8">日期</th><th data-page-node-id="cvRooInuiHLfEUBu3KB0T3">里程</th><th data-page-node-id="DIeDPaOxYkRkKF1IO6f6OY">纯开车</th><th data-page-node-id="XXFKuXAwgSlYrC8uEA14qG">游玩时间</th><th data-page-node-id="pDjrfIdpBvKSoZACve8Ivl">强度</th></tr></thead>
+    <tbody data-page-node-id="A7lOjV7nCbeF2NUvxV6bQY">
+      <tr data-page-node-id="ueQbjSsilHjhGsWIev2PVH"><td data-page-node-id="13aD4yAiEEV3rTXRBhwKFr">9/26 西宁集合</td><td data-page-node-id="bQXrNksJgyNQYoFrSHLXCa">—</td><td data-page-node-id="eR553ZEj76b0RWobPXgUEh">—</td><td data-page-node-id="C7FemO2KZldQ5XTTxKFJnc">夜市 1–2h</td><td class="ok" data-page-node-id="AEWSchR2BfxQdACUwwV5ch">休整</td></tr>
+      <tr data-page-node-id="QN7vwNWkhAQ4HpmWR5fghE"><td data-page-node-id="nVlDdQIrzNnShHvLzppsV6">9/27 西宁→祁连</td><td data-page-node-id="DKpQyZ2MNzICnkRNxfl9Rj">281</td><td data-page-node-id="GPhf09X0WID9nrCjHasXF1">~5h</td><td data-page-node-id="L2elypS6MqQ6hlYAtgkJDl">3–4h</td><td class="ok" data-page-node-id="00IE4OV9Wmt3DW8X5G5amC">舒适</td></tr>
+      <tr data-page-node-id="SJf2WAvSNl0pCu87hHrzFx"><td data-page-node-id="jxe8eGRrpFEdZ2FNG3KoFY">9/28 祁连→张掖</td><td data-page-node-id="GNmowEifMArb2eWj5FCxR6">~250</td><td data-page-node-id="nJ8LFbNvgOuIUOwqgWTn7f">~5h</td><td data-page-node-id="yKFW5QZlSMgp9TdmkS43DP">5–6h</td><td class="ok" data-page-node-id="YO7znMnNH93A5MBJfHQpPU">舒适（9号公路·丹霞日落）</td></tr>
+      <tr data-page-node-id="7YKI1OYClU3DNbdXsPZklX"><td data-page-node-id="lnZRWXZFxiF554Vii4TZjk">9/29 张掖→敦煌</td><td data-page-node-id="hHOHPalddZbrYHYmXa0FMC">~600</td><td data-page-node-id="Zy2jiOWhLC0jL50iHstgRO">~6.5h</td><td data-page-node-id="v2Se7TdJJQpwmUqSGCMWoS">夜市 1.5h</td><td class="warn" data-page-node-id="f4NpZFwA28gfPQrpQWcv0J">⚠️ 赶路日（轮换开）</td></tr>
+      <tr data-page-node-id="nkJcmP5f61kR2PpxEkS5A7"><td data-page-node-id="lEgHoIE590SlBqgnr97VAt">9/30 敦煌整天</td><td data-page-node-id="N4Go3dUOGtig0SvRZBnhRd">~50</td><td data-page-node-id="m1v4SEbW180Tf3B0MVHNCA">~1h</td><td data-page-node-id="g7nTTYx3EwY5B2Eo40ujro"><b data-page-node-id="B6ls3nxsr2QwuGoWiF7WOr">7h+</b></td><td class="ok" data-page-node-id="qqtAMAuEuUYfGRzKGb4GSX">★ 最爽一天</td></tr>
+      <tr data-page-node-id="eYhZPKniUv2RDuOQF0pIHD"><td data-page-node-id="7KRh0UmAPpScIXLuuvLMTi">10/1 敦煌/阿克塞→冷湖</td><td data-page-node-id="mlakULyybqqgaVc8QxSTDw">~280（绕多坝沟另加约60–100）</td><td data-page-node-id="Ng6y98Q99R3bz3TdSm56TH">~4h</td><td data-page-node-id="tr3252Nv6LbQYKgVJSvgfB">3h+观星</td><td class="ok" data-page-node-id="Kkx4UhuPYuZerfJFSiPcpB">舒适</td></tr>
+      <tr data-page-node-id="ys18dUXEYU9ZzCisruVfMO"><td data-page-node-id="CaDZdEGqdUieBmGMhzFpoU">10/2 冷湖→格尔木</td><td data-page-node-id="QgqgmyQxGqvloYXNHZe1T7">~470</td><td data-page-node-id="YWfKG5GJB91OvrECe9RK6K">~7h</td><td data-page-node-id="q9RQVtaNYQ1HaB6isK5oNm">4h</td><td class="warn" data-page-node-id="7ynPCoBEH0NISTBydaGJZE">⚠️ 最长驾驶日，8 点前出发</td></tr>
+      <tr data-page-node-id="XCPcmPoW3UV1Oyqq7uXqsV"><td data-page-node-id="D37DB1jjEtVIXbVywlgwH9">10/3 格尔木→曲麻莱</td><td data-page-node-id="BpKisqeRfCoFN1nodEOKqi">~380</td><td data-page-node-id="FapM6MnaOSIHTUl4qCd8Gu">~6.5h</td><td data-page-node-id="kGmp6TyS8FuFeN9PSAy4AC">2.5h</td><td class="warn" data-page-node-id="NfYYsESHvMLzqe467GXqiE">⚠️ 海拔急升日</td></tr>
+      <tr data-page-node-id="H1etv8K5A2QI4QGkKPeNjf"><td data-page-node-id="4mZ7SdxXQwKQzIw2fE6g4L">10/4 曲麻莱→玛多</td><td data-page-node-id="5BJ35sYuKOEAbxkYzYoWBv">~340</td><td data-page-node-id="wtXERcEUcIiGFuj9JfFAMn">~5.5h</td><td data-page-node-id="AebIoW0xJXA3ICfNQ2hdYv">2–3h</td><td class="warn" data-page-node-id="J88Osm5MTxOVxBDJurwHhA">高海拔+土路</td></tr>
+      <tr data-page-node-id="AYTYV6gCqQEUYidr5dRH3E"><td data-page-node-id="vW6gGuNDqzUY5c3uIloYhG">10/5 玛多→共和</td><td data-page-node-id="iEH36wJAnk4Xdn7cFbkKOO">~330</td><td data-page-node-id="oGYxtcBB4FtTBkObUcurac">~5h</td><td data-page-node-id="ohDzDtDVlAdLazVyvgG8if">2h</td><td class="ok" data-page-node-id="QDsNgbnCUoqAaqY15dOvjW">回血日</td></tr>
+      <tr data-page-node-id="A4RFICbPNhcHod96bv7zBr"><td data-page-node-id="1xrKJ6V8f1GviIOefRbZ0K">10/6 共和→西宁</td><td data-page-node-id="JWXC53I1gPN5u9IlMGZxXZ">~360</td><td data-page-node-id="ZxcldoLRFhG3T6X2Zx7ahH">~5.5h</td><td data-page-node-id="dGPKNnF6uwcA6Seb9CB4tY">2–3h</td><td class="ok" data-page-node-id="qMxKXdP5XNtlmIfexKOct3">收官（环湖）</td></tr>
+    </tbody>
+  </table>
+  <div class="kv" data-page-node-id="5C36YbAdBlAqpKJVi9IkA2">日均 ~310 KM；全程只有 9/29、10/2 超过 5h 纯驾驶，均给了对策。</div>
+</div>
+
+<h2 data-page-node-id="pZuLjK2SaA5IvkPSDwIsFL">四、装备清单</h2>
+<div class="grid grid-2" data-page-node-id="yI8Ks0H6nE18yD71EFgZQ7">
+  <div class="panel" data-page-node-id="VfSAeyoVPaMxiyXlPgz60w">
+    <h3 data-page-node-id="Ae22SvmZPlzeAe7Yy1DF8h">🫁 高反/医疗</h3>
+    <ul class="check" data-page-node-id="apjRDb12yb3bV6xyPLM48r">
+      <li data-page-node-id="B0MaJStpGiNqXER8zq6DWF">氧气瓶 4–6 罐（<b data-page-node-id="8GV5l0qARlXz5tSGgKfsLQ">格尔木采购</b>，曲麻莱/玛多各留 1 罐，配合氧房使用）</li>
+      <li data-page-node-id="Wa4XJhXM7jhkoJ2aK4zKQX">红景天/高原安：提前 7 天开始吃（现在就开始！）</li>
+      <li data-page-node-id="VBLsBIKjSHNbCNFjYt1rxj">便携血氧仪——10/3–10/4 每晚测，&lt;80% 下撤</li>
+      <li data-page-node-id="bK5j9mLpBwach1narK7Pcy">布洛芬、感冒药、肠胃药、葡萄糖</li>
+    </ul>
+  </div>
+  <div class="panel" data-page-node-id="iGDzp48rFulcvtAlqnoRzh">
+    <h3 data-page-node-id="sgam1b9jyq0D1rwOCmuX15">🧥 衣物</h3>
+    <ul class="check" data-page-node-id="BEElSbNYgtQttVDaOlXdU5">
+      <li data-page-node-id="dmiGHgoxN6HuEDx2PFHd9Y">厚羽绒服（曲麻莱/玛多夜间 -5 ~ -10℃）</li>
+      <li data-page-node-id="SaGM8WMliA5jGwHN113zSP">冲锋衣+抓绒+帽子手套（昆仑山口/二郎剑湖边风大）</li>
+      <li data-page-node-id="oZKBlBkVQNLS8dZNuPYZzl">SPF50+ 防晒、唇膏、墨镜</li>
+      <li data-page-node-id="W94OBNh81oGIX9fVQLD6ly">防风沙口罩（火星公路/雅丹区）+ 鸣沙山鞋套</li>
+    </ul>
+  </div>
+  <div class="panel" data-page-node-id="C3zKBI2PzQimZ0rQQyIYl2">
+    <h3 data-page-node-id="C5lEtzpa7nDIfHwlIr7uK2">🚗 车辆/补给</h3>
+    <ul class="check" data-page-node-id="lfvJMXSJ7X4nuuNtMpRJe4">
+      <li data-page-node-id="eRSSWUh6aDrehdw3cad187">备用油桶 20L（冷湖出发前加满——火星公路无加油站）</li>
+      <li data-page-node-id="LFaq6wMsnuatddAUqnp9Bu">备胎+拖车绳+脱困板+充气泵+搭电宝</li>
+      <li data-page-node-id="sIHDxVMLCv3xnb5HBsRszm">每段满油出发；无人区见加油站就加</li>
+      <li data-page-node-id="bzMiVwuiHJ69xiHeQ26Hj8">保险单、拖车救援电话存手机+打印一份</li>
+    </ul>
+  </div>
+  <div class="panel" data-page-node-id="rw30nfE4qr1b2OgqfxkWnz">
+    <h3 data-page-node-id="47P1VbxAaBFC8VoBKDFAIR">📡 通讯/记录</h3>
+    <ul class="check" data-page-node-id="wIfDub4r7JZwCBlwX2ZMr7">
+      <li data-page-node-id="wlhUchRnODSgjghVTDwYaK">离线地图（高德/奥维，火星公路段无信号）</li>
+      <li data-page-node-id="8SV8386KwPzQE78sWv8brB">充电宝 20000mAh ×2 + 车充</li>
+      <li data-page-node-id="mhs6GLJFIpFVNam9Z4R6kF">无人机（黑独山/丹霞/青海湖航拍顶级机位）</li>
+      <li data-page-node-id="F01z7aqdkxEzxWP4doiE04">手台或双机（无人区段互联络）</li>
+    </ul>
+  </div>
+</div>
+
+<h2 data-page-node-id="StPHkGMuFh9aZAx7l03KFp">五、重要预约/确认清单</h2>
+<div class="panel" data-page-node-id="GNfcEldmU8DpQML6Yj8lZl">
+  <table data-page-node-id="zqT1bElVvhndMdrXzHl1O1">
+    <thead data-page-node-id="sGhr8jFDCExDuDGWAyh4r7"><tr data-page-node-id="S2i2jz2aRycGzkRhUwVcNH"><th data-page-node-id="MWWau0qIrdHEFN6uaEAemW">事项</th><th data-page-node-id="mGGvKCdL3SBHqqAa8hR24O">时间节点</th><th data-page-node-id="fzysLevZtEPUEugiU5WIJy">状态</th></tr></thead>
+    <tbody data-page-node-id="T6Ls3vEDljJBO79IzAEUaK">
+      <tr data-page-node-id="H81QVFfQCu7hpT3wQFjp01"><td data-page-node-id="pz8nqtyLXWfFw8Xgfwq56Y">莫高窟 A 类票（9/30 场次）</td><td data-page-node-id="hiGJkMUsOyF1tpEFhChnDY">已开售，<b data-page-node-id="vkpo3ecNhWan3vwrukuCMW">今天立刻抢</b></td><td class="warn" data-page-node-id="yndDBjGy0CRlfi5QZTiIoI">⚡ 最紧急</td></tr>
+      <tr data-page-node-id="Z1pyZZZDnJBSvGW1H9ivFO"><td data-page-node-id="dGSORu7HhlhCIEiSUk8luf">敦煌 9/29–30、冷湖 10/1、曲麻莱/玛多氧房</td><td data-page-node-id="aXZOypv0x0m2QkgNvuvDYC">按自选清单尽快锁定，可免费取消的先订</td><td class="warn" data-page-node-id="o9uWptDUPcQZVFf4AY6Il3">⚡ 紧急</td></tr>
+      <tr data-page-node-id="Eq3tISs9XNZlUceWhLCA0A"><td data-page-node-id="7bpFakZxXK05I36nMYWhjY">西宁 9/26 汉庭 + 10/6 返程夜（如需）</td><td data-page-node-id="hRgQvnYlhJj3PXIYlvf1fB">顺带订好</td><td data-page-node-id="JkyDtVtHfxT5VoUfExnlnB">待办</td></tr>
+      <tr data-page-node-id="1LmzHGsAB1hl3hfYeZfcPR"><td data-page-node-id="ZBnUP1cKX6baYcekxAdUxV">鸣沙山/丹霞/察尔汗等门票</td><td data-page-node-id="HiHpGMtIabLPEj1qssC66h">提前 1–3 天线上购票</td><td data-page-node-id="UFEuAMDeV2lE1OwbvY4mB8">待办</td></tr>
+      <tr data-page-node-id="WOlZL1JFODGgClVMk6ecOb"><td data-page-node-id="08vU0risBE8UJ8rQ22xPJl">两湖一碑开放确认</td><td data-page-node-id="mVgRAPbruJtmCcanYtTzAL">出发前 3–5 天电话玛多文旅</td><td data-page-node-id="iz26R2KGVzknRJLQhoWuc6">待办</td></tr>
+      <tr data-page-node-id="h0sdom1D0LRerAkKev2Enh"><td data-page-node-id="YZkA2Y1fhroFasZXBgTAuY">车辆保养（机油/胎/刹车）</td><td data-page-node-id="1DOUQdGACcQsHF6TmCV7FU">出发前一周（约 9/19 当周）</td><td data-page-node-id="cGArRgk136UzOnABnA6RVZ">待办</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer" data-page-node-id="M3zbGPxVTx8rBU7oXHXADm">
+  本版住宿已全部替换为你们 9.26 提供的自选酒店清单（共 10 晚），标注「有氧气」为供氧房；无人区路段请以出发时实际管控为准。祝一路顺风！
+</div>
+
+</div>
+</body>
+</html>
+</script>
+
+<script>
+function tpl(id){ return document.getElementById(id).textContent; }
+var fP = document.getElementById('fPoster');
+var fD = document.getElementById('fDoc');
+function fit(f){
+  try{
+    var d = f.contentDocument;
+    if(d && d.documentElement){ f.style.height = d.documentElement.scrollHeight + 'px'; }
+  }catch(e){}
+}
+fP.srcdoc = tpl('tplPoster');
+fD.srcdoc = tpl('tplDoc');
+fP.onload = function(){ fit(fP); };
+fD.onload = function(){ fit(fD); };
+window.addEventListener('resize', function(){ fit(fP); fit(fD); });
+function show(which){
+  var pOn = which === 'p';
+  document.getElementById('wrapDoc').hidden = pOn ? true : false;
+  fP.parentElement.hidden = pOn ? false : true;
+  document.getElementById('bPoster').className = pOn ? 'bt on' : 'bt';
+  document.getElementById('bDoc').className = pOn ? 'bt' : 'bt on';
+  if(pOn){ setTimeout(function(){ fit(fP); }, 60); }
+  else { setTimeout(function(){ fit(fD); }, 60); }
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
